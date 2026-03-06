@@ -5,980 +5,1011 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pet Emirates — Pricing Calculator</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
-
-  :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --surface2: #1a1a1a;
-    --border: #222222;
-    --accent: #e8ff47;
-    --accent2: #ff6b35;
-    --text: #f0f0f0;
-    --muted: #555555;
-    --go: #4ade80;
-    --monitor: #facc15;
-    --kill: #f87171;
-    --launch: #38bdf8;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    min-height: 100vh;
-    padding: 24px 16px;
-  }
-
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .header h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(22px, 5vw, 36px);
-    font-weight: 800;
-    letter-spacing: -1px;
-    color: var(--accent);
-  }
-
-  .header p {
-    color: var(--muted);
-    font-size: 12px;
-    margin-top: 6px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .container {
-    max-width: 560px;
-    margin: 0 auto;
-  }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 16px;
-  }
-
-  .card-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 20px;
-  }
-
-  .field {
-    margin-bottom: 16px;
-  }
-
-  .field label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
-  }
-
-  .field label span {
-    color: var(--accent);
-    font-weight: 500;
-    font-size: 13px;
-  }
-
-  .input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  .prefix {
-    position: absolute;
-    left: 14px;
-    color: var(--muted);
-    font-size: 13px;
-    pointer-events: none;
-  }
-
-  .suffix {
-    position: absolute;
-    right: 14px;
-    color: var(--muted);
-    font-size: 13px;
-    pointer-events: none;
-  }
-
-  input[type="number"], input[type="range"] {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 15px;
-    padding: 12px 40px 12px 36px;
-    outline: none;
-    transition: border-color 0.2s;
-    -moz-appearance: textfield;
-  }
-
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
-
-  input[type="number"]:focus {
-    border-color: var(--accent);
-  }
-
-  input[type="range"] {
-    padding: 0;
-    height: 40px;
-    cursor: pointer;
-    -webkit-appearance: none;
-    background: transparent;
-    border: none;
-  }
-
-  input[type="range"]::-webkit-slider-runnable-track {
-    height: 4px;
-    border-radius: 2px;
-    background: var(--border);
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--accent);
-    margin-top: -7px;
-    cursor: pointer;
-    transition: transform 0.1s;
-  }
-
-  input[type="range"]::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-  }
-
-  .toggle-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-
-  .toggle-btn {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--surface2);
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-    letter-spacing: 0.5px;
-  }
-
-  .toggle-btn.active {
-    background: var(--accent);
-    color: var(--bg);
-    border-color: var(--accent);
-    font-weight: 700;
-  }
-
-  .toggle-btn.active-launch {
-    background: var(--launch);
-    color: var(--bg);
-    border-color: var(--launch);
-    font-weight: 700;
-  }
-
-  /* Strategy banner */
-  .strategy-banner {
-    border-radius: 10px;
-    padding: 14px 18px;
-    margin-bottom: 16px;
-    font-size: 12px;
-    line-height: 1.7;
-    display: none;
-  }
-
-  .strategy-banner.visible { display: block; }
-
-  .strategy-banner.visibility-mode {
-    background: rgba(56,189,248,0.08);
-    border: 1px solid rgba(56,189,248,0.3);
-    color: var(--launch);
-  }
-
-  .strategy-banner .banner-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  /* Results */
-  .results {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-
-  .results-header {
-    padding: 16px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .results-header span {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .verdict-badge {
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    padding: 4px 12px;
-    border-radius: 20px;
-  }
-
-  .verdict-go     { background: rgba(74,222,128,0.15);  color: var(--go);      border: 1px solid var(--go); }
-  .verdict-monitor{ background: rgba(250,204,21,0.15);  color: var(--monitor); border: 1px solid var(--monitor); }
-  .verdict-kill   { background: rgba(248,113,113,0.15); color: var(--kill);    border: 1px solid var(--kill); }
-  .verdict-launch { background: rgba(56,189,248,0.15);  color: var(--launch);  border: 1px solid var(--launch); }
-
-  .sell-price-block {
-    padding: 24px;
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-  }
-
-  .sell-price-label {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-
-  .sell-price-value {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(36px, 8vw, 52px);
-    font-weight: 800;
-    color: var(--accent);
-    letter-spacing: -2px;
-  }
-
-  .sell-price-value span {
-    font-size: 20px;
-    letter-spacing: 0;
-    color: var(--muted);
-  }
-
-  /* Visibility score bar */
-  .visibility-score-block {
-    padding: 16px 24px;
-    border-bottom: 1px solid var(--border);
-    display: none;
-  }
-
-  .visibility-score-block.show { display: block; }
-
-  .visibility-score-label {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .score-bar-bg {
-    height: 8px;
-    background: var(--surface2);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .score-bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    background: linear-gradient(90deg, var(--launch), var(--accent));
-    transition: width 0.4s ease;
-  }
-
-  .score-tags {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-  }
-
-  .score-tag {
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 20px;
-    background: rgba(56,189,248,0.1);
-    color: var(--launch);
-    border: 1px solid rgba(56,189,248,0.25);
-  }
-
-  .breakdown {
-    padding: 20px 24px;
-  }
-
-  .breakdown-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #1a1a1a;
-    font-size: 13px;
-  }
-
-  .breakdown-row:last-child { border-bottom: none; }
-
-  .breakdown-row .label { color: var(--muted); }
-
-  .breakdown-row .value {
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .breakdown-row .value.neg      { color: var(--kill); }
-  .breakdown-row .value.pos      { color: var(--go); }
-  .breakdown-row .value.neutral  { color: var(--accent); }
-  .breakdown-row .value.breakeven{ color: var(--launch); }
-
-  .breakdown-row.total {
-    margin-top: 8px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-  }
-
-  .breakdown-row.total .label { color: var(--text); }
-
-  .profit-meters {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 0 24px 20px;
-  }
-
-  .meter {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px;
-    text-align: center;
-  }
-
-  .meter-label {
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-
-  .meter-value {
-    font-family: 'Syne', sans-serif;
-    font-size: 20px;
-    font-weight: 800;
-  }
-
-  .rules {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 16px;
-  }
-
-  .rules-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 14px;
-  }
-
-  .rule-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 0;
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .rule-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .rule-dot.pass   { background: var(--go); }
-  .rule-dot.fail   { background: var(--kill); }
-  .rule-dot.warn   { background: var(--monitor); }
-  .rule-dot.launch { background: var(--launch); }
-
-  .rule-item.pass   { color: var(--go); }
-  .rule-item.fail   { color: var(--kill); }
-  .rule-item.warn   { color: var(--monitor); }
-  .rule-item.launch { color: var(--launch); }
-
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 4px 0;
-  }
-
-  .warn-box {
-    background: rgba(248,113,113,0.08);
-    border: 1px solid rgba(248,113,113,0.3);
-    border-radius: 8px;
-    padding: 14px 16px;
-    font-size: 12px;
-    color: var(--kill);
-    margin-top: 16px;
-    line-height: 1.6;
-    display: none;
-  }
-
-  .warn-box.visible { display: block; }
-
-  .footer {
-    text-align: center;
-    color: var(--muted);
-    font-size: 11px;
-    padding-top: 16px;
-    letter-spacing: 0.5px;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg:      #020c1b;
+  --s1:      rgba(255,255,255,0.03);
+  --s2:      rgba(255,255,255,0.06);
+  --b1:      rgba(255,255,255,0.07);
+  --b2:      rgba(255,255,255,0.13);
+  --cyan:    #00d9ff;
+  --purple:  #8b5cf6;
+  --text:    #e2e8f0;
+  --muted:   rgba(226,232,240,0.38);
+  --go:      #22c55e;
+  --warn:    #f59e0b;
+  --kill:    #ef4444;
+  --launch:  #3b82f6;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  min-height: 100vh;
+  padding: 28px 16px 56px;
+}
+
+/* Ambient glow */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 40% at 10% 35%, rgba(0,217,255,0.055) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 45% at 88% 12%, rgba(139,92,246,0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap { max-width: 500px; margin: 0 auto; position: relative; z-index: 1; }
+
+/* ─── HEADER ─── */
+.hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.hdr-brand h1 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: var(--text);
+}
+
+.hdr-brand p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Strategy toggle */
+.seg {
+  display: flex;
+  background: var(--s2);
+  border: 1px solid var(--b2);
+  border-radius: 100px;
+  padding: 3px;
+}
+
+.seg-btn {
+  padding: 6px 15px;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: all 0.22s;
+  background: transparent;
+  color: var(--muted);
+}
+
+.seg-btn.on-profit {
+  background: var(--cyan);
+  color: #020c1b;
+  box-shadow: 0 0 18px rgba(0,217,255,0.45);
+}
+
+.seg-btn.on-vis {
+  background: var(--launch);
+  color: #fff;
+  box-shadow: 0 0 18px rgba(59,130,246,0.45);
+}
+
+/* ─── CARD ─── */
+.card {
+  background: var(--s1);
+  border: 1px solid var(--b1);
+  border-radius: 18px;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.card-ttl {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+/* ─── PILL TOGGLES ─── */
+.plat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.plat-group > span {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.ptoggle {
+  display: flex;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--b1);
+  border-radius: 100px;
+  padding: 3px;
+}
+
+.ptoggle-btn {
+  flex: 1;
+  padding: 7px;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: transparent;
+  color: var(--muted);
+  text-align: center;
+}
+
+.ptoggle-btn.on {
+  background: rgba(0,217,255,0.12);
+  color: var(--cyan);
+  box-shadow: inset 0 0 0 1px rgba(0,217,255,0.28);
+}
+
+/* ─── FIELDS ─── */
+.field { margin-bottom: 18px; }
+.field:last-child { margin-bottom: 0; }
+
+.field-hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 9px;
+}
+
+.field-hd .fn { font-size: 13px; color: var(--muted); font-weight: 500; }
+.field-hd .fv {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cyan);
+}
+
+.inp-wrap { position: relative; }
+.inp-pre {
+  position: absolute;
+  left: 14px; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+input[type="number"] {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--b1);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 11px 16px 11px 46px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+input[type="number"]:focus {
+  border-color: rgba(0,217,255,0.4);
+  box-shadow: 0 0 0 3px rgba(0,217,255,0.08);
+}
+
+/* Gradient-fill slider */
+input[type="range"] {
+  width: 100%; height: 4px;
+  -webkit-appearance: none; appearance: none;
+  border-radius: 2px; outline: none; cursor: pointer;
+  background: linear-gradient(to right,
+    var(--cyan) 0%, var(--cyan) var(--pct,33%),
+    rgba(255,255,255,0.1) var(--pct,33%), rgba(255,255,255,0.1) 100%);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px rgba(0,217,255,0.65);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 16px rgba(0,217,255,0.9);
+}
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.hint { font-size: 10px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+/* ─── VISIBILITY BANNER ─── */
+.vis-banner {
+  background: rgba(59,130,246,0.07);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  display: none;
+}
+.vis-banner.show { display: block; }
+.vis-banner-ttl {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--launch); margin-bottom: 5px;
+}
+.vis-banner p { font-size: 12px; color: rgba(96,165,250,0.85); line-height: 1.65; }
+
+/* ─── RESULT CARD ─── */
+.res-card {
+  background: var(--s1);
+  border: 1px solid var(--b1);
+  border-radius: 22px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  position: relative;
+}
+
+/* Top glow bar */
+.res-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--top-glow, rgba(255,255,255,0.08));
+  transition: background 0.35s;
+}
+
+.res-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 22px 0;
+}
+
+.res-head-lbl {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted);
+}
+
+.badge {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.8px; text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 100px;
+  transition: all 0.3s;
+}
+.b-idle   { background: rgba(255,255,255,0.05); color: var(--muted);   border: 1px solid var(--b1); }
+.b-go     { background: rgba(34,197,94,0.12);   color: var(--go);      border: 1px solid rgba(34,197,94,0.3); }
+.b-warn   { background: rgba(245,158,11,0.12);  color: var(--warn);    border: 1px solid rgba(245,158,11,0.3); }
+.b-kill   { background: rgba(239,68,68,0.12);   color: var(--kill);    border: 1px solid rgba(239,68,68,0.3); }
+.b-launch { background: rgba(59,130,246,0.12);  color: var(--launch);  border: 1px solid rgba(59,130,246,0.3); }
+
+/* Price hero */
+.price-hero { text-align: center; padding: 18px 22px 14px; }
+
+.price-hero .cur {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px; font-weight: 500;
+  color: var(--muted);
+  vertical-align: top; line-height: 1.9;
+}
+
+.price-num {
+  font-size: clamp(54px, 14vw, 74px);
+  font-weight: 700;
+  letter-spacing: -3px;
+  color: var(--cyan);
+  text-shadow: 0 0 48px rgba(0,217,255,0.38);
+  transition: color 0.35s, text-shadow 0.35s;
+  line-height: 1;
+}
+.price-num.idle { color: rgba(226,232,240,0.18); text-shadow: none; }
+
+/* Metrics row */
+.metrics {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--b1);
+  border-top: 1px solid var(--b1);
+}
+.metric {
+  background: rgba(2,12,27,0.8);
+  padding: 14px 22px;
+  text-align: center;
+}
+.m-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 21px; font-weight: 600;
+  transition: color 0.3s;
+}
+.m-lbl {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--muted); margin-top: 3px;
+}
+
+/* Visibility score bar */
+.vis-score {
+  padding: 14px 22px;
+  border-top: 1px solid var(--b1);
+  display: none;
+}
+.vis-score.show { display: block; }
+.vs-hd {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 9px;
+}
+.vs-hd .vs-ttl {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--muted);
+}
+.vs-hd .vs-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 600;
+  color: var(--launch);
+}
+.score-track {
+  height: 6px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 3px; overflow: hidden;
+}
+.score-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--launch), var(--cyan));
+  transition: width 0.42s cubic-bezier(0.4,0,0.2,1);
+}
+.chips {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
+}
+.chip {
+  font-size: 10px; font-weight: 600;
+  padding: 3px 10px; border-radius: 100px;
+  background: rgba(59,130,246,0.1);
+  color: var(--launch);
+  border: 1px solid rgba(59,130,246,0.2);
+}
+
+/* Breakdown */
+.breakdown {
+  border-top: 1px solid var(--b1);
+  padding: 16px 22px;
+}
+.bd-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+.bd-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 6px; border-radius: 8px; font-size: 13px;
+}
+.bd-item:hover { background: rgba(255,255,255,0.025); }
+.bd-l { font-size: 12px; color: var(--muted); }
+.bd-v {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 500; color: var(--text);
+}
+.bd-v.neg { color: var(--kill); }
+.bd-v.cyn { color: var(--cyan); }
+
+.bd-total {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 6px 0;
+  border-top: 1px solid var(--b1); margin-top: 4px;
+}
+.bd-total .bd-l { font-size: 13px; font-weight: 600; color: var(--text); }
+.bd-total .bd-v { font-size: 16px; font-weight: 700; }
+.bd-v.pos   { color: var(--go); }
+.bd-v.blue  { color: var(--launch); }
+
+/* ─── RULES CARD ─── */
+.rules-card {
+  background: var(--s1);
+  border: 1px solid var(--b1);
+  border-radius: 18px;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.rc {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--b1);
+  transition: all 0.2s;
+}
+.rc-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+  background: rgba(255,255,255,0.06);
+  color: var(--muted);
+}
+.rc-text .rc-name {
+  font-size: 11px; font-weight: 600; display: block;
+  color: var(--muted);
+}
+.rc-text .rc-detail {
+  font-size: 10px; color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* States */
+.rc.pass   { border-color: rgba(34,197,94,0.22);  background: rgba(34,197,94,0.05); }
+.rc.fail   { border-color: rgba(239,68,68,0.22);  background: rgba(239,68,68,0.05); }
+.rc.launch { border-color: rgba(59,130,246,0.22); background: rgba(59,130,246,0.05); }
+
+.rc.pass   .rc-icon { background: rgba(34,197,94,0.15);  color: var(--go); }
+.rc.fail   .rc-icon { background: rgba(239,68,68,0.15);  color: var(--kill); }
+.rc.launch .rc-icon { background: rgba(59,130,246,0.15); color: var(--launch); }
+
+.rc.pass   .rc-name { color: var(--go); }
+.rc.fail   .rc-name { color: var(--kill); }
+.rc.launch .rc-name { color: var(--launch); }
+
+/* Alert */
+.alert {
+  background: rgba(239,68,68,0.07);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 10px;
+  padding: 12px 14px; font-size: 12px;
+  color: rgba(252,165,165,0.85);
+  margin-top: 10px; line-height: 1.55;
+  display: none;
+}
+.alert.show { display: block; }
+
+/* ─── FOOTER ─── */
+.footer {
+  text-align: center; font-size: 11px;
+  color: var(--muted); padding-top: 8px;
+  letter-spacing: 0.5px;
+}
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="container">
-
-  <div class="header">
-    <h1>PRICING CALCULATOR</h1>
-    <p>Pet Emirates — Noon & Amazon UAE</p>
+  <!-- Header -->
+  <div class="hdr">
+    <div class="hdr-brand">
+      <h1>Pet Emirates</h1>
+      <p>Pricing Calculator</p>
+    </div>
+    <div class="seg">
+      <button class="seg-btn on-profit" id="btn-profit" onclick="setStrategy('profit')">Profit</button>
+      <button class="seg-btn" id="btn-vis" onclick="setStrategy('visibility')">Visibility</button>
+    </div>
   </div>
 
-  <!-- Strategy Mode -->
+  <!-- Visibility banner -->
+  <div class="vis-banner" id="vis-banner">
+    <div class="vis-banner-ttl">Market Entry Mode</div>
+    <p>Price at break-even to drive sales volume, collect reviews, and improve search ranking on Noon / Amazon. Profit target = 0%.</p>
+  </div>
+
+  <!-- Platform & Fulfillment -->
   <div class="card">
-    <div class="card-title">Strategy Mode</div>
-    <div class="toggle-row">
-      <button class="toggle-btn active" id="btn-profit-mode" onclick="setStrategy('profit')">PROFIT MODE</button>
-      <button class="toggle-btn" id="btn-visibility-mode" onclick="setStrategy('visibility')">VISIBILITY MODE</button>
-    </div>
-    <div style="font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.3px;">
-      <span id="strategy-hint">Target a healthy margin on every sale.</span>
+    <div class="plat-row">
+      <div class="plat-group">
+        <span>Platform</span>
+        <div class="ptoggle" id="plat-tog">
+          <button class="ptoggle-btn on" onclick="setPlatform('noon')">Noon</button>
+          <button class="ptoggle-btn" onclick="setPlatform('amazon')">Amazon</button>
+        </div>
+      </div>
+      <div class="plat-group">
+        <span>Fulfillment</span>
+        <div class="ptoggle" id="ful-tog">
+          <button class="ptoggle-btn on" onclick="setFulfillment('fbp')">FBP</button>
+          <button class="ptoggle-btn" onclick="setFulfillment('fbn')">FBN</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Visibility mode banner -->
-  <div class="strategy-banner visibility-mode" id="visibility-banner">
-    <div class="banner-title">Market Entry Strategy Active</div>
-    Pricing at break-even to drive sales volume, build reviews, and improve search ranking on Noon / Amazon.
-    Profit target is set to 0% — you cover all costs but reinvest margin into visibility.
-    Switch back to Profit Mode once you have traction.
-  </div>
-
-  <!-- Platform -->
+  <!-- Costs -->
   <div class="card">
-    <div class="card-title">Platform & Fulfillment</div>
-    <div class="toggle-row">
-      <button class="toggle-btn active" onclick="setPlatform('noon')">NOON</button>
-      <button class="toggle-btn" onclick="setPlatform('amazon')">AMAZON</button>
-    </div>
-    <div class="toggle-row">
-      <button class="toggle-btn active" onclick="setFulfillment('fbp')">FBP</button>
-      <button class="toggle-btn" onclick="setFulfillment('fbn')">FBN</button>
-    </div>
-  </div>
-
-  <!-- Inputs -->
-  <div class="card">
-    <div class="card-title">Product Costs</div>
+    <div class="card-ttl">Product Costs</div>
 
     <div class="field">
-      <label>Base Product Cost (excl. VAT) <span id="lbl-cost">0.00 AED</span></label>
-      <div class="input-wrap">
-        <span class="prefix">AED</span>
-        <input type="number" id="cost" value="" placeholder="0.00" step="0.01" oninput="calc()">
+      <div class="field-hd">
+        <span class="fn">Base Cost (excl. VAT)</span>
+        <span class="fv" id="lbl-cost">—</span>
+      </div>
+      <div class="inp-wrap">
+        <span class="inp-pre">AED</span>
+        <input type="number" id="cost" placeholder="0.00" step="0.01" oninput="calc()">
       </div>
     </div>
 
     <div class="field">
-      <label>VAT on Product <span id="lbl-vat">5%</span></label>
-      <input type="range" id="vat" min="0" max="15" step="1" value="5" oninput="updateLabel('vat','lbl-vat','%');calc()">
+      <div class="field-hd">
+        <span class="fn">VAT on Product</span>
+        <span class="fv" id="lbl-vat">5%</span>
+      </div>
+      <input type="range" id="vat" min="0" max="15" step="1" value="5"
+        oninput="slide(this,'lbl-vat','%')">
     </div>
 
     <div class="field">
-      <label>Referral Fee <span id="lbl-referral">9%</span></label>
-      <input type="range" id="referral" min="5" max="25" step="1" value="9" oninput="updateLabel('referral','lbl-referral','%');calc()">
+      <div class="field-hd">
+        <span class="fn">Referral Fee</span>
+        <span class="fv" id="lbl-referral">9%</span>
+      </div>
+      <input type="range" id="referral" min="5" max="25" step="1" value="9"
+        oninput="slide(this,'lbl-referral','%')">
     </div>
 
     <div class="field">
-      <label>
-        Delivery Charge
-        <span id="lbl-delivery-note" style="font-size:10px;color:var(--monitor)">NET after reimbursement</span>
-      </label>
-      <div class="input-wrap">
-        <span class="prefix">AED</span>
-        <input type="number" id="delivery" value="14" placeholder="14" step="1" oninput="calc()">
+      <div class="field-hd">
+        <span class="fn">Delivery Charge</span>
+        <span class="fv" style="font-size:10px;color:var(--warn)">net after reimb.</span>
+      </div>
+      <div class="inp-wrap">
+        <span class="inp-pre">AED</span>
+        <input type="number" id="delivery" value="14" step="1" oninput="calc()">
       </div>
     </div>
 
     <div class="field" id="reimb-field">
-      <label>Noon Reimbursement <span id="lbl-reimb">0 AED</span></label>
-      <input type="range" id="reimb" min="0" max="10" step="1" value="0" oninput="updateLabel('reimb','lbl-reimb',' AED');calc()">
-      <div style="font-size:10px;color:var(--muted);margin-top:6px;">10 AED if order value &lt; 100 AED · 0 AED if order value ≥ 100 AED</div>
+      <div class="field-hd">
+        <span class="fn">Noon Reimbursement</span>
+        <span class="fv" id="lbl-reimb">0 AED</span>
+      </div>
+      <input type="range" id="reimb" min="0" max="10" step="1" value="0"
+        oninput="slide(this,'lbl-reimb',' AED')">
+      <div class="hint">10 AED if order &lt; 100 AED &nbsp;·&nbsp; 0 AED if order ≥ 100 AED</div>
     </div>
-
   </div>
 
-  <!-- Ads & Profit Target -->
+  <!-- Ads & Target -->
   <div class="card">
-    <div class="card-title">Ads & Profit Target</div>
-
-    <div class="field">
-      <label>Ads Spend % of Sell Price <span id="lbl-ads">10%</span></label>
-      <input type="range" id="ads" min="0" max="20" step="1" value="10" oninput="updateLabel('ads','lbl-ads','%');calc()">
+    <div class="card-ttl">Ads &amp; Target</div>
+    <div class="two-col">
+      <div class="field">
+        <div class="field-hd">
+          <span class="fn">Ads Spend</span>
+          <span class="fv" id="lbl-ads">10%</span>
+        </div>
+        <input type="range" id="ads" min="0" max="20" step="1" value="10"
+          oninput="slide(this,'lbl-ads','%')">
+      </div>
+      <div class="field" id="profit-field">
+        <div class="field-hd">
+          <span class="fn">Target Profit</span>
+          <span class="fv" id="lbl-profit">12%</span>
+        </div>
+        <input type="range" id="profit" min="0" max="40" step="1" value="12"
+          oninput="slide(this,'lbl-profit','%')">
+      </div>
     </div>
-
-    <div class="field" id="profit-field">
-      <label>Target Profit % <span id="lbl-profit">12%</span></label>
-      <input type="range" id="profit" min="0" max="40" step="1" value="12" oninput="updateLabel('profit','lbl-profit','%');calc()">
-    </div>
-
   </div>
 
-  <!-- Results -->
-  <div class="results">
-    <div class="results-header">
-      <span>Recommended Sell Price</span>
-      <div class="verdict-badge verdict-monitor" id="verdict">—</div>
+  <!-- Result Card -->
+  <div class="res-card" id="res-card">
+    <div class="res-head">
+      <span class="res-head-lbl">Recommended Sell Price</span>
+      <div class="badge b-idle" id="verdict">—</div>
     </div>
 
-    <div class="sell-price-block">
-      <div class="sell-price-label">List at</div>
-      <div class="sell-price-value"><span>AED </span><span id="out-price">—</span></div>
+    <div class="price-hero">
+      <span class="cur">AED </span><span class="price-num idle" id="out-price">—</span>
     </div>
 
-    <!-- Visibility score bar (only shown in visibility mode) -->
-    <div class="visibility-score-block" id="visibility-score-block">
-      <div class="visibility-score-label">
-        <span>Market Competitiveness</span>
-        <span id="score-pct">—</span>
+    <div class="metrics">
+      <div class="metric">
+        <div class="m-val" id="out-profit-aed" style="color:var(--muted)">—</div>
+        <div class="m-lbl" id="net-label">Net Profit</div>
       </div>
-      <div class="score-bar-bg">
-        <div class="score-bar-fill" id="score-bar" style="width:0%"></div>
+      <div class="metric">
+        <div class="m-val" id="out-margin" style="color:var(--muted)">—</div>
+        <div class="m-lbl">Margin</div>
       </div>
-      <div class="score-tags" id="score-tags"></div>
     </div>
 
-    <div class="profit-meters">
-      <div class="meter">
-        <div class="meter-label">Net P&L</div>
-        <div class="meter-value" id="out-profit-aed" style="color:var(--accent)">—</div>
+    <!-- Visibility score bar -->
+    <div class="vis-score" id="vis-score">
+      <div class="vs-hd">
+        <span class="vs-ttl">Market Competitiveness</span>
+        <span class="vs-pct" id="score-pct">0%</span>
       </div>
-      <div class="meter">
-        <div class="meter-label">Net Margin</div>
-        <div class="meter-value" id="out-margin" style="color:var(--accent)">—</div>
+      <div class="score-track">
+        <div class="score-fill" id="score-fill" style="width:0%"></div>
       </div>
+      <div class="chips" id="chips"></div>
     </div>
 
     <div class="breakdown">
-      <div class="breakdown-row">
-        <span class="label">Sell Price</span>
-        <span class="value neutral" id="bd-price">—</span>
+      <div class="bd-grid">
+        <div class="bd-item">
+          <span class="bd-l">Sell Price</span>
+          <span class="bd-v cyn" id="bd-price">—</span>
+        </div>
+        <div class="bd-item">
+          <span class="bd-l">Product Cost</span>
+          <span class="bd-v neg" id="bd-cost">—</span>
+        </div>
+        <div class="bd-item">
+          <span class="bd-l">VAT</span>
+          <span class="bd-v neg" id="bd-vat">—</span>
+        </div>
+        <div class="bd-item">
+          <span class="bd-l">Referral Fee</span>
+          <span class="bd-v neg" id="bd-referral">—</span>
+        </div>
+        <div class="bd-item">
+          <span class="bd-l">Delivery</span>
+          <span class="bd-v neg" id="bd-delivery">—</span>
+        </div>
+        <div class="bd-item">
+          <span class="bd-l">Ads Cost</span>
+          <span class="bd-v neg" id="bd-ads">—</span>
+        </div>
       </div>
-      <div class="breakdown-row">
-        <span class="label">Product Cost</span>
-        <span class="value neg" id="bd-cost">—</span>
-      </div>
-      <div class="breakdown-row">
-        <span class="label">VAT on Product</span>
-        <span class="value neg" id="bd-vat">—</span>
-      </div>
-      <div class="breakdown-row">
-        <span class="label">Referral Fee</span>
-        <span class="value neg" id="bd-referral">—</span>
-      </div>
-      <div class="breakdown-row">
-        <span class="label">Delivery (net)</span>
-        <span class="value neg" id="bd-delivery">—</span>
-      </div>
-      <div class="breakdown-row">
-        <span class="label">Ads Cost</span>
-        <span class="value neg" id="bd-ads">—</span>
-      </div>
-      <div class="divider"></div>
-      <div class="breakdown-row total">
-        <span class="label" id="net-label">Net Profit</span>
-        <span class="value pos" id="bd-net">—</span>
+      <div class="bd-total">
+        <span class="bd-l" id="bd-net-label">Net Profit</span>
+        <span class="bd-v pos" id="bd-net">—</span>
       </div>
     </div>
   </div>
 
-  <!-- Rules Check -->
-  <div class="rules">
-    <div class="rules-title" id="rules-title">Decision Rules Check</div>
-    <div class="rule-item" id="rule-margin">
-      <div class="rule-dot warn"></div>
-      <span>Margin ≥ 12%</span>
-    </div>
-    <div class="rule-item" id="rule-profit">
-      <div class="rule-dot warn"></div>
-      <span>Profit ≥ 10 AED</span>
-    </div>
-    <div class="rule-item" id="rule-ads">
-      <div class="rule-dot warn"></div>
-      <span>Ads ≤ 15% of sell price</span>
-    </div>
-    <div class="rule-item" id="rule-return">
-      <div class="rule-dot warn"></div>
-      <span>1 return ≤ 3 orders profit</span>
+  <!-- Rules -->
+  <div class="rules-card">
+    <div class="card-ttl" id="rules-ttl">Decision Rules</div>
+    <div class="rules-grid">
+
+      <!-- Profit mode rules -->
+      <div class="rc" id="rule-margin">
+        <div class="rc-icon">%</div>
+        <div class="rc-text">
+          <span class="rc-name">Margin ≥ 12%</span>
+          <span class="rc-detail" id="d-margin">—</span>
+        </div>
+      </div>
+      <div class="rc" id="rule-profit">
+        <div class="rc-icon">+</div>
+        <div class="rc-text">
+          <span class="rc-name">Profit ≥ 10 AED</span>
+          <span class="rc-detail" id="d-profit">—</span>
+        </div>
+      </div>
+      <div class="rc" id="rule-ads">
+        <div class="rc-icon">~</div>
+        <div class="rc-text">
+          <span class="rc-name">Ads ≤ 15%</span>
+          <span class="rc-detail" id="d-ads">—</span>
+        </div>
+      </div>
+      <div class="rc" id="rule-return">
+        <div class="rc-icon">↩</div>
+        <div class="rc-text">
+          <span class="rc-name">Return Cover</span>
+          <span class="rc-detail" id="d-return">3× covers 1 return</span>
+        </div>
+      </div>
+
+      <!-- Visibility mode rules (hidden by default) -->
+      <div class="rc" id="rule-breakeven" style="display:none">
+        <div class="rc-icon">=</div>
+        <div class="rc-text">
+          <span class="rc-name">Break-even</span>
+          <span class="rc-detail" id="d-breakeven">P&amp;L ≥ 0</span>
+        </div>
+      </div>
+      <div class="rc" id="rule-ads-vis" style="display:none">
+        <div class="rc-icon">~</div>
+        <div class="rc-text">
+          <span class="rc-name">Ads ≤ 15%</span>
+          <span class="rc-detail" id="d-ads-vis">—</span>
+        </div>
+      </div>
+      <div class="rc" id="rule-loss-cap" style="display:none">
+        <div class="rc-icon">↓</div>
+        <div class="rc-text">
+          <span class="rc-name">Loss Cap</span>
+          <span class="rc-detail" id="d-loss-cap">Max −5 AED/unit</span>
+        </div>
+      </div>
     </div>
 
-    <!-- Visibility-mode extra rules (hidden in profit mode) -->
-    <div class="rule-item" id="rule-breakeven" style="display:none;">
-      <div class="rule-dot warn"></div>
-      <span>Break-even or better (P&L ≥ 0)</span>
-    </div>
-    <div class="rule-item" id="rule-ads-visibility" style="display:none;">
-      <div class="rule-dot warn"></div>
-      <span>Ads ≤ 15% of sell price</span>
-    </div>
-    <div class="rule-item" id="rule-loss-cap" style="display:none;">
-      <div class="rule-dot warn"></div>
-      <span>Max loss ≤ 5 AED per unit</span>
-    </div>
-
-    <div class="warn-box" id="warn-box">
-      ⚠ Enter your product cost to see pricing recommendation.
+    <div class="alert" id="alert-box">
+      Enter your product cost above to see pricing recommendations.
     </div>
   </div>
 
-  <div class="footer">
-    Pet Emirates · Internal Tool · All fees excl. platform VAT
-  </div>
+  <div class="footer">Pet Emirates &nbsp;·&nbsp; Internal Tool &nbsp;·&nbsp; All fees excl. platform VAT</div>
 
-</div>
+</div><!-- /wrap -->
 
 <script>
-  let platform = 'noon';
-  let fulfillment = 'fbp';
-  let strategy = 'profit'; // 'profit' | 'visibility'
+let platform   = 'noon';
+let fulfillment = 'fbp';
+let strategy   = 'profit';
 
-  /* ── Strategy toggle ── */
-  function setStrategy(s) {
-    strategy = s;
-    const btnProfit     = document.getElementById('btn-profit-mode');
-    const btnVisibility = document.getElementById('btn-visibility-mode');
-    const banner        = document.getElementById('visibility-banner');
-    const hint          = document.getElementById('strategy-hint');
-    const profitField   = document.getElementById('profit-field');
-    const profitSlider  = document.getElementById('profit');
-    const scoreBlock    = document.getElementById('visibility-score-block');
-
-    // Profit-mode rules
-    ['rule-margin','rule-profit','rule-ads','rule-return'].forEach(id => {
-      document.getElementById(id).style.display = s === 'profit' ? '' : 'none';
-    });
-    // Visibility-mode rules
-    ['rule-breakeven','rule-ads-visibility','rule-loss-cap'].forEach(id => {
-      document.getElementById(id).style.display = s === 'visibility' ? '' : 'none';
-    });
-
-    document.getElementById('rules-title').textContent =
-      s === 'visibility' ? 'Visibility Mode Rules Check' : 'Decision Rules Check';
-
-    if (s === 'visibility') {
-      btnProfit.className     = 'toggle-btn';
-      btnVisibility.className = 'toggle-btn active-launch';
-      banner.classList.add('visible');
-      hint.textContent = 'Price at break-even to maximise sales volume and marketplace ranking.';
-      profitSlider.value = 0;
-      document.getElementById('lbl-profit').textContent = '0%';
-      scoreBlock.classList.add('show');
-    } else {
-      btnProfit.className     = 'toggle-btn active';
-      btnVisibility.className = 'toggle-btn';
-      banner.classList.remove('visible');
-      hint.textContent = 'Target a healthy margin on every sale.';
-      profitSlider.value = 12;
-      document.getElementById('lbl-profit').textContent = '12%';
-      scoreBlock.classList.remove('show');
-    }
-
-    calc();
-  }
-
-  /* ── Platform / fulfillment ── */
-  function setPlatform(p) {
-    platform = p;
-    document.querySelectorAll('.toggle-row')[1].querySelectorAll('.toggle-btn').forEach((b,i) => {
-      b.classList.toggle('active', (i===0 && p==='noon') || (i===1 && p==='amazon'));
-    });
-    const reimbField = document.getElementById('reimb-field');
-    reimbField.style.display = p === 'noon' ? 'block' : 'none';
-    calc();
-  }
-
-  function setFulfillment(f) {
-    fulfillment = f;
-    document.querySelectorAll('.toggle-row')[2].querySelectorAll('.toggle-btn').forEach((b,i) => {
-      b.classList.toggle('active', (i===0 && f==='fbp') || (i===1 && f==='fbn'));
-    });
-    const deliveryInput = document.getElementById('delivery');
-    if (f === 'fbn') {
-      deliveryInput.value = 5.58;
-      document.getElementById('reimb-field').style.display = 'none';
-    } else {
-      deliveryInput.value = 14;
-      document.getElementById('reimb-field').style.display = platform === 'noon' ? 'block' : 'none';
-    }
-    calc();
-  }
-
-  function updateLabel(id, lblId, suffix) {
-    document.getElementById(lblId).textContent = document.getElementById(id).value + suffix;
-  }
-
-  function fmt(n) {
-    return n.toFixed(2);
-  }
-
-  /* ── Main calculation ── */
-  function calc() {
-    const cost           = parseFloat(document.getElementById('cost').value) || 0;
-    const vatPct         = parseFloat(document.getElementById('vat').value) / 100;
-    const referralPct    = parseFloat(document.getElementById('referral').value) / 100;
-    const delivery       = parseFloat(document.getElementById('delivery').value) || 0;
-    const reimb          = platform === 'noon' && fulfillment === 'fbp'
-                             ? parseFloat(document.getElementById('reimb').value) || 0
-                             : 0;
-    const adsPct         = parseFloat(document.getElementById('ads').value) / 100;
-    const targetProfitPct= parseFloat(document.getElementById('profit').value) / 100;
-
-    document.getElementById('lbl-cost').textContent = fmt(cost) + ' AED';
-
-    if (cost <= 0) {
-      document.getElementById('warn-box').classList.add('visible');
-      document.getElementById('warn-box').textContent = '⚠ Enter your product cost to see pricing recommendation.';
-      return;
-    }
-    document.getElementById('warn-box').classList.remove('visible');
-
-    const vatAmount  = cost * vatPct;
-    const netDelivery = delivery - reimb;
-
-    // sellPrice * (1 - referralPct - adsPct - targetProfitPct) = cost + vatAmount + netDelivery
-    const denom = 1 - referralPct - adsPct - targetProfitPct;
-
-    if (denom <= 0) {
-      document.getElementById('warn-box').classList.add('visible');
-      document.getElementById('warn-box').textContent = '⚠ Referral + Ads + Profit % exceeds 100%. Adjust sliders.';
-      return;
-    }
-
-    const sellPrice   = (cost + vatAmount + netDelivery) / denom;
-    const roundedPrice = Math.ceil(sellPrice);
-
-    const rReferral = roundedPrice * referralPct;
-    const rAds      = roundedPrice * adsPct;
-    const rProfit   = roundedPrice - cost - vatAmount - rReferral - netDelivery - rAds;
-    const rMargin   = (rProfit / roundedPrice) * 100;
-    const rAdsPct   = (rAds / roundedPrice) * 100;
-
-    // ── UI updates ──
-    document.getElementById('out-price').textContent = fmt(roundedPrice);
-    document.getElementById('out-profit-aed').textContent =
-      (rProfit >= 0 ? '+' : '') + fmt(rProfit) + ' AED';
-    document.getElementById('out-margin').textContent = fmt(rMargin) + '%';
-
-    document.getElementById('bd-price').textContent    = 'AED ' + fmt(roundedPrice);
-    document.getElementById('bd-cost').textContent     = '- AED ' + fmt(cost);
-    document.getElementById('bd-vat').textContent      = '- AED ' + fmt(vatAmount);
-    document.getElementById('bd-referral').textContent = '- AED ' + fmt(rReferral);
-    document.getElementById('bd-delivery').textContent = '- AED ' + fmt(netDelivery);
-    document.getElementById('bd-ads').textContent      = '- AED ' + fmt(rAds);
-    document.getElementById('bd-net').textContent      =
-      (rProfit >= 0 ? '+' : '') + 'AED ' + fmt(rProfit);
-
-    // Net label
-    document.getElementById('net-label').textContent =
-      strategy === 'visibility' ? 'Net P&L (Break-even check)' : 'Net Profit';
-
-    // Net P&L color
-    const netEl   = document.getElementById('bd-net');
-    const profitEl = document.getElementById('out-profit-aed');
-    const marginEl = document.getElementById('out-margin');
-
-    if (strategy === 'visibility') {
-      if (rProfit >= 0) {
-        netEl.className     = 'value breakeven';
-        profitEl.style.color = 'var(--launch)';
-        marginEl.style.color = 'var(--launch)';
-      } else if (rProfit >= -5) {
-        netEl.className     = 'value';
-        profitEl.style.color = 'var(--monitor)';
-        marginEl.style.color = 'var(--monitor)';
-      } else {
-        netEl.className     = 'value neg';
-        profitEl.style.color = 'var(--kill)';
-        marginEl.style.color = 'var(--kill)';
-      }
-    } else {
-      netEl.className = rProfit >= 0 ? 'value pos' : 'value neg';
-      if (rProfit >= 10 && rMargin >= 12) {
-        profitEl.style.color = 'var(--go)';
-        marginEl.style.color = 'var(--go)';
-      } else if (rProfit > 0) {
-        profitEl.style.color = 'var(--monitor)';
-        marginEl.style.color = 'var(--monitor)';
-      } else {
-        profitEl.style.color = 'var(--kill)';
-        marginEl.style.color = 'var(--kill)';
-      }
-    }
-
-    // ── Verdict ──
-    const verdict = document.getElementById('verdict');
-    verdict.className = 'verdict-badge';
-
-    if (strategy === 'visibility') {
-      if (rProfit >= 0) {
-        verdict.classList.add('verdict-launch');
-        verdict.textContent = 'LAUNCH';
-      } else if (rProfit >= -5) {
-        verdict.classList.add('verdict-monitor');
-        verdict.textContent = 'MONITOR';
-      } else {
-        verdict.classList.add('verdict-kill');
-        verdict.textContent = 'KILL';
-      }
-    } else {
-      if (rProfit >= 10 && rMargin >= 12 && rAdsPct <= 15) {
-        verdict.classList.add('verdict-go');
-        verdict.textContent = 'GO';
-      } else if (rProfit <= 0) {
-        verdict.classList.add('verdict-kill');
-        verdict.textContent = 'KILL';
-      } else {
-        verdict.classList.add('verdict-monitor');
-        verdict.textContent = 'MONITOR';
-      }
-    }
-
-    // ── Rules check ──
-    if (strategy === 'profit') {
-      const ruleMargin   = document.getElementById('rule-margin');
-      const ruleProfitEl = document.getElementById('rule-profit');
-      const ruleAds      = document.getElementById('rule-ads');
-      const ruleReturn   = document.getElementById('rule-return');
-
-      setRule(ruleMargin,   rMargin >= 12,  `Margin ≥ 12% — actual: ${fmt(rMargin)}%`);
-      setRule(ruleProfitEl, rProfit >= 10,  `Profit ≥ 10 AED — actual: AED ${fmt(rProfit)}`);
-      setRule(ruleAds,      rAdsPct <= 15,  `Ads ≤ 15% — actual: ${fmt(rAdsPct)}%`);
-      const returnCover = rProfit > 0 ? (rProfit * 3) >= roundedPrice * 0.15 : false;
-      setRule(ruleReturn, returnCover, `1 return ≤ 3 orders profit`);
-
-    } else {
-      // Visibility mode rules
-      const ruleBreakeven   = document.getElementById('rule-breakeven');
-      const ruleAdsVis      = document.getElementById('rule-ads-visibility');
-      const ruleLossCap     = document.getElementById('rule-loss-cap');
-
-      setRuleLaunch(ruleBreakeven, rProfit >= 0,
-        `Break-even or better — P&L: AED ${fmt(rProfit)}`);
-      setRuleLaunch(ruleAdsVis, rAdsPct <= 15,
-        `Ads ≤ 15% — actual: ${fmt(rAdsPct)}%`);
-      setRuleLaunch(ruleLossCap, rProfit >= -5,
-        `Max loss ≤ 5 AED per unit — actual: AED ${fmt(rProfit)}`);
-
-      // Visibility score bar
-      updateVisibilityScore(roundedPrice, cost, rProfit, rAdsPct);
-    }
-  }
-
-  /* ── Visibility score bar ── */
-  function updateVisibilityScore(price, cost, profit, adsPct) {
-    // Score: lower price vs cost = better visibility. Range 0–100.
-    const priceRatio = cost > 0 ? price / cost : 1;
-    // Closer to 1× cost = maximum competitiveness
-    // We map priceRatio 1.0→100%, 2.0→50%, 3.0→0%
-    const rawScore = Math.max(0, Math.min(100, (2 - priceRatio) * 100));
-    const scoreBar = document.getElementById('score-bar');
-    const scorePct = document.getElementById('score-pct');
-    const scoreTags = document.getElementById('score-tags');
-
-    scoreBar.style.width = rawScore + '%';
-    scorePct.textContent = Math.round(rawScore) + '%';
-
-    const tags = [];
-    if (profit >= 0)        tags.push('Break-even');
-    if (adsPct >= 8)        tags.push('Boosted Ads');
-    if (priceRatio <= 1.5)  tags.push('Aggressive Price');
-    if (priceRatio <= 1.25) tags.push('Launch Price');
-    if (profit < 0 && profit >= -5) tags.push('Subsidised');
-
-    scoreTags.innerHTML = tags.map(t => `<span class="score-tag">${t}</span>`).join('');
-  }
-
-  function setRule(el, pass, text) {
-    el.className = 'rule-item ' + (pass ? 'pass' : 'fail');
-    el.querySelector('.rule-dot').className = 'rule-dot ' + (pass ? 'pass' : 'fail');
-    el.querySelector('span').textContent = text;
-  }
-
-  function setRuleLaunch(el, pass, text) {
-    el.className = 'rule-item ' + (pass ? 'launch' : 'fail');
-    el.querySelector('.rule-dot').className = 'rule-dot ' + (pass ? 'launch' : 'fail');
-    el.querySelector('span').textContent = text;
-  }
-
-  // Init
+/* ── Slider: update fill % and label ── */
+function slide(el, lblId, suffix) {
+  const min = +el.min, max = +el.max, val = +el.value;
+  const pct = ((val - min) / (max - min)) * 100;
+  el.style.setProperty('--pct', pct + '%');
+  document.getElementById(lblId).textContent = val + suffix;
   calc();
+}
+
+function initSlider(id) {
+  const el = document.getElementById(id);
+  const min = +el.min, max = +el.max, val = +el.value;
+  el.style.setProperty('--pct', ((val - min) / (max - min)) * 100 + '%');
+}
+
+/* ── Strategy ── */
+function setStrategy(s) {
+  strategy = s;
+  const bp = document.getElementById('btn-profit');
+  const bv = document.getElementById('btn-vis');
+  const banner = document.getElementById('vis-banner');
+  const visScore = document.getElementById('vis-score');
+  const profitSlider = document.getElementById('profit');
+
+  const profitRules = ['rule-margin','rule-profit','rule-ads','rule-return'];
+  const visRules    = ['rule-breakeven','rule-ads-vis','rule-loss-cap'];
+
+  profitRules.forEach(id => document.getElementById(id).style.display = s === 'profit' ? '' : 'none');
+  visRules.forEach(id => document.getElementById(id).style.display = s === 'visibility' ? '' : 'none');
+
+  document.getElementById('rules-ttl').textContent =
+    s === 'visibility' ? 'Visibility Mode Rules' : 'Decision Rules';
+
+  if (s === 'visibility') {
+    bp.className = 'seg-btn';
+    bv.className = 'seg-btn on-vis';
+    banner.classList.add('show');
+    visScore.classList.add('show');
+    profitSlider.value = 0;
+    document.getElementById('lbl-profit').textContent = '0%';
+    initSlider('profit');
+  } else {
+    bp.className = 'seg-btn on-profit';
+    bv.className = 'seg-btn';
+    banner.classList.remove('show');
+    visScore.classList.remove('show');
+    profitSlider.value = 12;
+    document.getElementById('lbl-profit').textContent = '12%';
+    initSlider('profit');
+  }
+  calc();
+}
+
+/* ── Platform ── */
+function setPlatform(p) {
+  platform = p;
+  document.getElementById('plat-tog').querySelectorAll('.ptoggle-btn').forEach((b,i) => {
+    b.classList.toggle('on', (i===0 && p==='noon') || (i===1 && p==='amazon'));
+  });
+  document.getElementById('reimb-field').style.display = p === 'noon' ? 'block' : 'none';
+  calc();
+}
+
+/* ── Fulfillment ── */
+function setFulfillment(f) {
+  fulfillment = f;
+  document.getElementById('ful-tog').querySelectorAll('.ptoggle-btn').forEach((b,i) => {
+    b.classList.toggle('on', (i===0 && f==='fbp') || (i===1 && f==='fbn'));
+  });
+  const del = document.getElementById('delivery');
+  if (f === 'fbn') {
+    del.value = 5.58;
+    document.getElementById('reimb-field').style.display = 'none';
+  } else {
+    del.value = 14;
+    document.getElementById('reimb-field').style.display = platform === 'noon' ? 'block' : 'none';
+  }
+  calc();
+}
+
+/* ── Format ── */
+function f2(n) { return n.toFixed(2); }
+
+/* ── Main calc ── */
+function calc() {
+  const cost         = parseFloat(document.getElementById('cost').value) || 0;
+  const vatPct       = parseFloat(document.getElementById('vat').value) / 100;
+  const referralPct  = parseFloat(document.getElementById('referral').value) / 100;
+  const delivery     = parseFloat(document.getElementById('delivery').value) || 0;
+  const reimb        = (platform === 'noon' && fulfillment === 'fbp')
+                         ? parseFloat(document.getElementById('reimb').value) || 0 : 0;
+  const adsPct       = parseFloat(document.getElementById('ads').value) / 100;
+  const tgtProfitPct = parseFloat(document.getElementById('profit').value) / 100;
+
+  document.getElementById('lbl-cost').textContent = cost > 0 ? f2(cost) + ' AED' : '—';
+
+  const alert = document.getElementById('alert-box');
+
+  if (cost <= 0) {
+    alert.textContent = 'Enter your product cost above to see pricing recommendations.';
+    alert.classList.add('show');
+    resetUI();
+    return;
+  }
+
+  const denom = 1 - referralPct - adsPct - tgtProfitPct;
+  if (denom <= 0) {
+    alert.textContent = 'Referral + Ads + Profit % exceeds 100%. Adjust sliders.';
+    alert.classList.add('show');
+    resetUI();
+    return;
+  }
+  alert.classList.remove('show');
+
+  const vatAmt      = cost * vatPct;
+  const netDelivery = delivery - reimb;
+  const sellPrice   = (cost + vatAmt + netDelivery) / denom;
+  const rounded     = Math.ceil(sellPrice);
+
+  const rRef    = rounded * referralPct;
+  const rAds    = rounded * adsPct;
+  const rProfit = rounded - cost - vatAmt - rRef - netDelivery - rAds;
+  const rMargin = (rProfit / rounded) * 100;
+  const rAdsPct = (rAds / rounded) * 100;
+
+  /* ── Price display ── */
+  const priceEl = document.getElementById('out-price');
+  priceEl.textContent = f2(rounded);
+  priceEl.classList.remove('idle');
+
+  /* ── Verdict + glow ── */
+  const verdict = document.getElementById('verdict');
+  const card    = document.getElementById('res-card');
+  verdict.className = 'badge';
+
+  let glowColor;
+  if (strategy === 'visibility') {
+    if (rProfit >= 0) {
+      verdict.classList.add('b-launch'); verdict.textContent = 'LAUNCH';
+      glowColor = 'rgba(59,130,246,0.7)';
+    } else if (rProfit >= -5) {
+      verdict.classList.add('b-warn');  verdict.textContent = 'MONITOR';
+      glowColor = 'rgba(245,158,11,0.7)';
+    } else {
+      verdict.classList.add('b-kill');  verdict.textContent = 'KILL';
+      glowColor = 'rgba(239,68,68,0.7)';
+    }
+  } else {
+    if (rProfit >= 10 && rMargin >= 12 && rAdsPct <= 15) {
+      verdict.classList.add('b-go');    verdict.textContent = 'GO';
+      glowColor = 'rgba(34,197,94,0.7)';
+    } else if (rProfit <= 0) {
+      verdict.classList.add('b-kill');  verdict.textContent = 'KILL';
+      glowColor = 'rgba(239,68,68,0.7)';
+    } else {
+      verdict.classList.add('b-warn');  verdict.textContent = 'MONITOR';
+      glowColor = 'rgba(245,158,11,0.7)';
+    }
+  }
+  card.style.setProperty('--top-glow', glowColor);
+
+  /* ── Metric colors ── */
+  const profitEl = document.getElementById('out-profit-aed');
+  const marginEl = document.getElementById('out-margin');
+  const netLbl   = document.getElementById('net-label');
+  const bdNetEl  = document.getElementById('bd-net');
+  const bdNetLbl = document.getElementById('bd-net-label');
+
+  profitEl.textContent = (rProfit >= 0 ? '+' : '') + f2(rProfit) + ' AED';
+  marginEl.textContent = f2(rMargin) + '%';
+  netLbl.textContent   = strategy === 'visibility' ? 'Net P&L' : 'Net Profit';
+  bdNetLbl.textContent = strategy === 'visibility' ? 'Net P&L' : 'Net Profit';
+
+  let metricColor;
+  if (strategy === 'visibility') {
+    metricColor = rProfit >= 0 ? 'var(--launch)' : (rProfit >= -5 ? 'var(--warn)' : 'var(--kill)');
+    bdNetEl.className = 'bd-v ' + (rProfit >= 0 ? 'blue' : 'neg');
+  } else {
+    metricColor = (rProfit >= 10 && rMargin >= 12) ? 'var(--go)'
+                : rProfit > 0 ? 'var(--warn)' : 'var(--kill)';
+    bdNetEl.className = 'bd-v ' + (rProfit >= 0 ? 'pos' : 'neg');
+  }
+  profitEl.style.color = metricColor;
+  marginEl.style.color = metricColor;
+
+  /* ── Breakdown ── */
+  document.getElementById('bd-price').textContent    = f2(rounded);
+  document.getElementById('bd-cost').textContent     = '−' + f2(cost);
+  document.getElementById('bd-vat').textContent      = '−' + f2(vatAmt);
+  document.getElementById('bd-referral').textContent = '−' + f2(rRef);
+  document.getElementById('bd-delivery').textContent = '−' + f2(netDelivery);
+  document.getElementById('bd-ads').textContent      = '−' + f2(rAds);
+  document.getElementById('bd-net').textContent      = (rProfit >= 0 ? '+' : '') + f2(rProfit);
+
+  /* ── Rules ── */
+  if (strategy === 'profit') {
+    setRC('rule-margin',  rMargin >= 12,  `${f2(rMargin)}%`,    'd-margin');
+    setRC('rule-profit',  rProfit >= 10,  `${f2(rProfit)} AED`, 'd-profit');
+    setRC('rule-ads',     rAdsPct <= 15,  `${f2(rAdsPct)}%`,    'd-ads');
+    const cover = rProfit > 0 && (rProfit * 3) >= rounded * 0.15;
+    setRC('rule-return',  cover,          cover ? 'covered' : 'not covered', 'd-return');
+  } else {
+    setRCLaunch('rule-breakeven', rProfit >= 0,   (rProfit >= 0 ? '+' : '') + f2(rProfit) + ' AED', 'd-breakeven');
+    setRCLaunch('rule-ads-vis',   rAdsPct <= 15,  f2(rAdsPct) + '%',                                'd-ads-vis');
+    setRCLaunch('rule-loss-cap',  rProfit >= -5,  (rProfit >= 0 ? '+' : '') + f2(rProfit) + ' AED', 'd-loss-cap');
+    updateVisScore(rounded, cost, rProfit, rAdsPct);
+  }
+}
+
+function resetUI() {
+  document.getElementById('out-price').textContent = '—';
+  document.getElementById('out-price').classList.add('idle');
+  document.getElementById('out-profit-aed').textContent = '—';
+  document.getElementById('out-profit-aed').style.color = 'var(--muted)';
+  document.getElementById('out-margin').textContent = '—';
+  document.getElementById('out-margin').style.color = 'var(--muted)';
+  ['bd-price','bd-cost','bd-vat','bd-referral','bd-delivery','bd-ads','bd-net'].forEach(id => {
+    document.getElementById(id).textContent = '—';
+  });
+  const verdict = document.getElementById('verdict');
+  verdict.className = 'badge b-idle'; verdict.textContent = '—';
+  document.getElementById('res-card').style.setProperty('--top-glow','rgba(255,255,255,0.08)');
+}
+
+function setRC(id, pass, detail, detailId) {
+  const el = document.getElementById(id);
+  el.className = 'rc ' + (pass ? 'pass' : 'fail');
+  document.getElementById(detailId).textContent = detail;
+}
+
+function setRCLaunch(id, pass, detail, detailId) {
+  const el = document.getElementById(id);
+  el.className = 'rc ' + (pass ? 'launch' : 'fail');
+  document.getElementById(detailId).textContent = detail;
+}
+
+function updateVisScore(price, cost, profit, adsPct) {
+  const ratio = cost > 0 ? price / cost : 1;
+  const score = Math.max(0, Math.min(100, (2 - ratio) * 100));
+  document.getElementById('score-fill').style.width = score + '%';
+  document.getElementById('score-pct').textContent = Math.round(score) + '%';
+  const tags = [];
+  if (profit >= 0)        tags.push('Break-even');
+  if (adsPct >= 8)        tags.push('Boosted Ads');
+  if (ratio <= 1.5)       tags.push('Aggressive');
+  if (ratio <= 1.25)      tags.push('Launch Price');
+  if (profit < 0 && profit >= -5) tags.push('Subsidised');
+  document.getElementById('chips').innerHTML =
+    tags.map(t => `<span class="chip">${t}</span>`).join('');
+}
+
+/* ── Init ── */
+['vat','referral','reimb','ads','profit'].forEach(initSlider);
+calc();
 </script>
 </body>
 </html>
