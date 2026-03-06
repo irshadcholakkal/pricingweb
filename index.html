@@ -19,6 +19,7 @@
     --go: #4ade80;
     --monitor: #facc15;
     --kill: #f87171;
+    --launch: #38bdf8;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -198,6 +199,40 @@
     font-weight: 700;
   }
 
+  .toggle-btn.active-launch {
+    background: var(--launch);
+    color: var(--bg);
+    border-color: var(--launch);
+    font-weight: 700;
+  }
+
+  /* Strategy banner */
+  .strategy-banner {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    line-height: 1.7;
+    display: none;
+  }
+
+  .strategy-banner.visible { display: block; }
+
+  .strategy-banner.visibility-mode {
+    background: rgba(56,189,248,0.08);
+    border: 1px solid rgba(56,189,248,0.3);
+    color: var(--launch);
+  }
+
+  .strategy-banner .banner-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
   /* Results */
   .results {
     background: var(--surface);
@@ -233,9 +268,10 @@
     border-radius: 20px;
   }
 
-  .verdict-go { background: rgba(74,222,128,0.15); color: var(--go); border: 1px solid var(--go); }
-  .verdict-monitor { background: rgba(250,204,21,0.15); color: var(--monitor); border: 1px solid var(--monitor); }
-  .verdict-kill { background: rgba(248,113,113,0.15); color: var(--kill); border: 1px solid var(--kill); }
+  .verdict-go     { background: rgba(74,222,128,0.15);  color: var(--go);      border: 1px solid var(--go); }
+  .verdict-monitor{ background: rgba(250,204,21,0.15);  color: var(--monitor); border: 1px solid var(--monitor); }
+  .verdict-kill   { background: rgba(248,113,113,0.15); color: var(--kill);    border: 1px solid var(--kill); }
+  .verdict-launch { background: rgba(56,189,248,0.15);  color: var(--launch);  border: 1px solid var(--launch); }
 
   .sell-price-block {
     padding: 24px;
@@ -265,6 +301,57 @@
     color: var(--muted);
   }
 
+  /* Visibility score bar */
+  .visibility-score-block {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: none;
+  }
+
+  .visibility-score-block.show { display: block; }
+
+  .visibility-score-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .score-bar-bg {
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--launch), var(--accent));
+    transition: width 0.4s ease;
+  }
+
+  .score-tags {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .score-tag {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(56,189,248,0.1);
+    color: var(--launch);
+    border: 1px solid rgba(56,189,248,0.25);
+  }
+
   .breakdown {
     padding: 20px 24px;
   }
@@ -282,14 +369,15 @@
 
   .breakdown-row .label { color: var(--muted); }
 
-  .breakdown-row .value { 
+  .breakdown-row .value {
     font-weight: 500;
     color: var(--text);
   }
 
-  .breakdown-row .value.neg { color: var(--kill); }
-  .breakdown-row .value.pos { color: var(--go); }
-  .breakdown-row .value.neutral { color: var(--accent); }
+  .breakdown-row .value.neg      { color: var(--kill); }
+  .breakdown-row .value.pos      { color: var(--go); }
+  .breakdown-row .value.neutral  { color: var(--accent); }
+  .breakdown-row .value.breakeven{ color: var(--launch); }
 
   .breakdown-row.total {
     margin-top: 8px;
@@ -365,13 +453,15 @@
     flex-shrink: 0;
   }
 
-  .rule-dot.pass { background: var(--go); }
-  .rule-dot.fail { background: var(--kill); }
-  .rule-dot.warn { background: var(--monitor); }
+  .rule-dot.pass   { background: var(--go); }
+  .rule-dot.fail   { background: var(--kill); }
+  .rule-dot.warn   { background: var(--monitor); }
+  .rule-dot.launch { background: var(--launch); }
 
-  .rule-item.pass { color: var(--go); }
-  .rule-item.fail { color: var(--kill); }
-  .rule-item.warn { color: var(--monitor); }
+  .rule-item.pass   { color: var(--go); }
+  .rule-item.fail   { color: var(--kill); }
+  .rule-item.warn   { color: var(--monitor); }
+  .rule-item.launch { color: var(--launch); }
 
   .divider {
     height: 1px;
@@ -411,6 +501,26 @@
     <p>Pet Emirates — Noon & Amazon UAE</p>
   </div>
 
+  <!-- Strategy Mode -->
+  <div class="card">
+    <div class="card-title">Strategy Mode</div>
+    <div class="toggle-row">
+      <button class="toggle-btn active" id="btn-profit-mode" onclick="setStrategy('profit')">PROFIT MODE</button>
+      <button class="toggle-btn" id="btn-visibility-mode" onclick="setStrategy('visibility')">VISIBILITY MODE</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.3px;">
+      <span id="strategy-hint">Target a healthy margin on every sale.</span>
+    </div>
+  </div>
+
+  <!-- Visibility mode banner -->
+  <div class="strategy-banner visibility-mode" id="visibility-banner">
+    <div class="banner-title">Market Entry Strategy Active</div>
+    Pricing at break-even to drive sales volume, build reviews, and improve search ranking on Noon / Amazon.
+    Profit target is set to 0% — you cover all costs but reinvest margin into visibility.
+    Switch back to Profit Mode once you have traction.
+  </div>
+
   <!-- Platform -->
   <div class="card">
     <div class="card-title">Platform & Fulfillment</div>
@@ -448,7 +558,7 @@
 
     <div class="field">
       <label>
-        Delivery Charge 
+        Delivery Charge
         <span id="lbl-delivery-note" style="font-size:10px;color:var(--monitor)">NET after reimbursement</span>
       </label>
       <div class="input-wrap">
@@ -474,9 +584,9 @@
       <input type="range" id="ads" min="0" max="20" step="1" value="10" oninput="updateLabel('ads','lbl-ads','%');calc()">
     </div>
 
-    <div class="field">
+    <div class="field" id="profit-field">
       <label>Target Profit % <span id="lbl-profit">12%</span></label>
-      <input type="range" id="profit" min="5" max="40" step="1" value="12" oninput="updateLabel('profit','lbl-profit','%');calc()">
+      <input type="range" id="profit" min="0" max="40" step="1" value="12" oninput="updateLabel('profit','lbl-profit','%');calc()">
     </div>
 
   </div>
@@ -493,9 +603,21 @@
       <div class="sell-price-value"><span>AED </span><span id="out-price">—</span></div>
     </div>
 
+    <!-- Visibility score bar (only shown in visibility mode) -->
+    <div class="visibility-score-block" id="visibility-score-block">
+      <div class="visibility-score-label">
+        <span>Market Competitiveness</span>
+        <span id="score-pct">—</span>
+      </div>
+      <div class="score-bar-bg">
+        <div class="score-bar-fill" id="score-bar" style="width:0%"></div>
+      </div>
+      <div class="score-tags" id="score-tags"></div>
+    </div>
+
     <div class="profit-meters">
       <div class="meter">
-        <div class="meter-label">Net Profit</div>
+        <div class="meter-label">Net P&L</div>
         <div class="meter-value" id="out-profit-aed" style="color:var(--accent)">—</div>
       </div>
       <div class="meter">
@@ -531,7 +653,7 @@
       </div>
       <div class="divider"></div>
       <div class="breakdown-row total">
-        <span class="label">Net Profit</span>
+        <span class="label" id="net-label">Net Profit</span>
         <span class="value pos" id="bd-net">—</span>
       </div>
     </div>
@@ -539,7 +661,7 @@
 
   <!-- Rules Check -->
   <div class="rules">
-    <div class="rules-title">Decision Rules Check</div>
+    <div class="rules-title" id="rules-title">Decision Rules Check</div>
     <div class="rule-item" id="rule-margin">
       <div class="rule-dot warn"></div>
       <span>Margin ≥ 12%</span>
@@ -557,6 +679,20 @@
       <span>1 return ≤ 3 orders profit</span>
     </div>
 
+    <!-- Visibility-mode extra rules (hidden in profit mode) -->
+    <div class="rule-item" id="rule-breakeven" style="display:none;">
+      <div class="rule-dot warn"></div>
+      <span>Break-even or better (P&L ≥ 0)</span>
+    </div>
+    <div class="rule-item" id="rule-ads-visibility" style="display:none;">
+      <div class="rule-dot warn"></div>
+      <span>Ads ≤ 15% of sell price</span>
+    </div>
+    <div class="rule-item" id="rule-loss-cap" style="display:none;">
+      <div class="rule-dot warn"></div>
+      <span>Max loss ≤ 5 AED per unit</span>
+    </div>
+
     <div class="warn-box" id="warn-box">
       ⚠ Enter your product cost to see pricing recommendation.
     </div>
@@ -571,10 +707,56 @@
 <script>
   let platform = 'noon';
   let fulfillment = 'fbp';
+  let strategy = 'profit'; // 'profit' | 'visibility'
 
+  /* ── Strategy toggle ── */
+  function setStrategy(s) {
+    strategy = s;
+    const btnProfit     = document.getElementById('btn-profit-mode');
+    const btnVisibility = document.getElementById('btn-visibility-mode');
+    const banner        = document.getElementById('visibility-banner');
+    const hint          = document.getElementById('strategy-hint');
+    const profitField   = document.getElementById('profit-field');
+    const profitSlider  = document.getElementById('profit');
+    const scoreBlock    = document.getElementById('visibility-score-block');
+
+    // Profit-mode rules
+    ['rule-margin','rule-profit','rule-ads','rule-return'].forEach(id => {
+      document.getElementById(id).style.display = s === 'profit' ? '' : 'none';
+    });
+    // Visibility-mode rules
+    ['rule-breakeven','rule-ads-visibility','rule-loss-cap'].forEach(id => {
+      document.getElementById(id).style.display = s === 'visibility' ? '' : 'none';
+    });
+
+    document.getElementById('rules-title').textContent =
+      s === 'visibility' ? 'Visibility Mode Rules Check' : 'Decision Rules Check';
+
+    if (s === 'visibility') {
+      btnProfit.className     = 'toggle-btn';
+      btnVisibility.className = 'toggle-btn active-launch';
+      banner.classList.add('visible');
+      hint.textContent = 'Price at break-even to maximise sales volume and marketplace ranking.';
+      profitSlider.value = 0;
+      document.getElementById('lbl-profit').textContent = '0%';
+      scoreBlock.classList.add('show');
+    } else {
+      btnProfit.className     = 'toggle-btn active';
+      btnVisibility.className = 'toggle-btn';
+      banner.classList.remove('visible');
+      hint.textContent = 'Target a healthy margin on every sale.';
+      profitSlider.value = 12;
+      document.getElementById('lbl-profit').textContent = '12%';
+      scoreBlock.classList.remove('show');
+    }
+
+    calc();
+  }
+
+  /* ── Platform / fulfillment ── */
   function setPlatform(p) {
     platform = p;
-    document.querySelectorAll('.toggle-row')[0].querySelectorAll('.toggle-btn').forEach((b,i) => {
+    document.querySelectorAll('.toggle-row')[1].querySelectorAll('.toggle-btn').forEach((b,i) => {
       b.classList.toggle('active', (i===0 && p==='noon') || (i===1 && p==='amazon'));
     });
     const reimbField = document.getElementById('reimb-field');
@@ -584,7 +766,7 @@
 
   function setFulfillment(f) {
     fulfillment = f;
-    document.querySelectorAll('.toggle-row')[1].querySelectorAll('.toggle-btn').forEach((b,i) => {
+    document.querySelectorAll('.toggle-row')[2].querySelectorAll('.toggle-btn').forEach((b,i) => {
       b.classList.toggle('active', (i===0 && f==='fbp') || (i===1 && f==='fbn'));
     });
     const deliveryInput = document.getElementById('delivery');
@@ -606,14 +788,17 @@
     return n.toFixed(2);
   }
 
+  /* ── Main calculation ── */
   function calc() {
-    const cost = parseFloat(document.getElementById('cost').value) || 0;
-    const vatPct = parseFloat(document.getElementById('vat').value) / 100;
-    const referralPct = parseFloat(document.getElementById('referral').value) / 100;
-    const delivery = parseFloat(document.getElementById('delivery').value) || 0;
-    const reimb = platform === 'noon' && fulfillment === 'fbp' ? parseFloat(document.getElementById('reimb').value) || 0 : 0;
-    const adsPct = parseFloat(document.getElementById('ads').value) / 100;
-    const targetProfitPct = parseFloat(document.getElementById('profit').value) / 100;
+    const cost           = parseFloat(document.getElementById('cost').value) || 0;
+    const vatPct         = parseFloat(document.getElementById('vat').value) / 100;
+    const referralPct    = parseFloat(document.getElementById('referral').value) / 100;
+    const delivery       = parseFloat(document.getElementById('delivery').value) || 0;
+    const reimb          = platform === 'noon' && fulfillment === 'fbp'
+                             ? parseFloat(document.getElementById('reimb').value) || 0
+                             : 0;
+    const adsPct         = parseFloat(document.getElementById('ads').value) / 100;
+    const targetProfitPct= parseFloat(document.getElementById('profit').value) / 100;
 
     document.getElementById('lbl-cost').textContent = fmt(cost) + ' AED';
 
@@ -624,11 +809,9 @@
     }
     document.getElementById('warn-box').classList.remove('visible');
 
-    const vatAmount = cost * vatPct;
+    const vatAmount  = cost * vatPct;
     const netDelivery = delivery - reimb;
 
-    // Solve for sell price:
-    // sellPrice = cost + vatAmount + referral*sellPrice + netDelivery + ads*sellPrice + targetProfit*sellPrice
     // sellPrice * (1 - referralPct - adsPct - targetProfitPct) = cost + vatAmount + netDelivery
     const denom = 1 - referralPct - adsPct - targetProfitPct;
 
@@ -638,85 +821,159 @@
       return;
     }
 
-    const sellPrice = (cost + vatAmount + netDelivery) / denom;
-    const referralAmt = sellPrice * referralPct;
-    const adsAmt = sellPrice * adsPct;
-    const netProfit = sellPrice - cost - vatAmount - referralAmt - netDelivery - adsAmt;
-    const margin = (netProfit / sellPrice) * 100;
-
-    // Rounded sell price (round up to nearest 0.99 or whole)
+    const sellPrice   = (cost + vatAmount + netDelivery) / denom;
     const roundedPrice = Math.ceil(sellPrice);
 
-    // Recalculate with rounded price
     const rReferral = roundedPrice * referralPct;
-    const rAds = roundedPrice * adsPct;
-    const rProfit = roundedPrice - cost - vatAmount - rReferral - netDelivery - rAds;
-    const rMargin = (rProfit / roundedPrice) * 100;
-    const rAdsPct = (rAds / roundedPrice) * 100;
+    const rAds      = roundedPrice * adsPct;
+    const rProfit   = roundedPrice - cost - vatAmount - rReferral - netDelivery - rAds;
+    const rMargin   = (rProfit / roundedPrice) * 100;
+    const rAdsPct   = (rAds / roundedPrice) * 100;
 
-    // Update UI
+    // ── UI updates ──
     document.getElementById('out-price').textContent = fmt(roundedPrice);
-    document.getElementById('out-profit-aed').textContent = (rProfit >= 0 ? '+' : '') + fmt(rProfit) + ' AED';
+    document.getElementById('out-profit-aed').textContent =
+      (rProfit >= 0 ? '+' : '') + fmt(rProfit) + ' AED';
     document.getElementById('out-margin').textContent = fmt(rMargin) + '%';
 
-    document.getElementById('bd-price').textContent = 'AED ' + fmt(roundedPrice);
-    document.getElementById('bd-cost').textContent = '- AED ' + fmt(cost);
-    document.getElementById('bd-vat').textContent = '- AED ' + fmt(vatAmount);
+    document.getElementById('bd-price').textContent    = 'AED ' + fmt(roundedPrice);
+    document.getElementById('bd-cost').textContent     = '- AED ' + fmt(cost);
+    document.getElementById('bd-vat').textContent      = '- AED ' + fmt(vatAmount);
     document.getElementById('bd-referral').textContent = '- AED ' + fmt(rReferral);
     document.getElementById('bd-delivery').textContent = '- AED ' + fmt(netDelivery);
-    document.getElementById('bd-ads').textContent = '- AED ' + fmt(rAds);
-    document.getElementById('bd-net').textContent = (rProfit >= 0 ? '+' : '') + 'AED ' + fmt(rProfit);
+    document.getElementById('bd-ads').textContent      = '- AED ' + fmt(rAds);
+    document.getElementById('bd-net').textContent      =
+      (rProfit >= 0 ? '+' : '') + 'AED ' + fmt(rProfit);
 
-    // Profit meter color
+    // Net label
+    document.getElementById('net-label').textContent =
+      strategy === 'visibility' ? 'Net P&L (Break-even check)' : 'Net Profit';
+
+    // Net P&L color
+    const netEl   = document.getElementById('bd-net');
     const profitEl = document.getElementById('out-profit-aed');
     const marginEl = document.getElementById('out-margin');
-    if (rProfit >= 10 && rMargin >= 12) {
-      profitEl.style.color = 'var(--go)';
-      marginEl.style.color = 'var(--go)';
-    } else if (rProfit > 0) {
-      profitEl.style.color = 'var(--monitor)';
-      marginEl.style.color = 'var(--monitor)';
+
+    if (strategy === 'visibility') {
+      if (rProfit >= 0) {
+        netEl.className     = 'value breakeven';
+        profitEl.style.color = 'var(--launch)';
+        marginEl.style.color = 'var(--launch)';
+      } else if (rProfit >= -5) {
+        netEl.className     = 'value';
+        profitEl.style.color = 'var(--monitor)';
+        marginEl.style.color = 'var(--monitor)';
+      } else {
+        netEl.className     = 'value neg';
+        profitEl.style.color = 'var(--kill)';
+        marginEl.style.color = 'var(--kill)';
+      }
     } else {
-      profitEl.style.color = 'var(--kill)';
-      marginEl.style.color = 'var(--kill)';
+      netEl.className = rProfit >= 0 ? 'value pos' : 'value neg';
+      if (rProfit >= 10 && rMargin >= 12) {
+        profitEl.style.color = 'var(--go)';
+        marginEl.style.color = 'var(--go)';
+      } else if (rProfit > 0) {
+        profitEl.style.color = 'var(--monitor)';
+        marginEl.style.color = 'var(--monitor)';
+      } else {
+        profitEl.style.color = 'var(--kill)';
+        marginEl.style.color = 'var(--kill)';
+      }
     }
 
-    // Rules check
-    const ruleMargin = document.getElementById('rule-margin');
-    const ruleProfitEl = document.getElementById('rule-profit');
-    const ruleAds = document.getElementById('rule-ads');
-    const ruleReturn = document.getElementById('rule-return');
-
-    setRule(ruleMargin, rMargin >= 12, `Margin ≥ 12% — actual: ${fmt(rMargin)}%`);
-    setRule(ruleProfitEl, rProfit >= 10, `Profit ≥ 10 AED — actual: AED ${fmt(rProfit)}`);
-    setRule(ruleAds, rAdsPct <= 15, `Ads ≤ 15% — actual: ${fmt(rAdsPct)}%`);
-    const returnCover = rProfit > 0 ? (rProfit * 3) >= roundedPrice * 0.15 : false;
-    setRule(ruleReturn, returnCover, `1 return ≤ 3 orders profit`);
-
-    // Verdict
+    // ── Verdict ──
     const verdict = document.getElementById('verdict');
     verdict.className = 'verdict-badge';
-    if (rProfit >= 10 && rMargin >= 12 && rAdsPct <= 15) {
-      verdict.classList.add('verdict-go');
-      verdict.textContent = 'GO';
-    } else if (rProfit > 0 && rProfit < 10) {
-      verdict.classList.add('verdict-monitor');
-      verdict.textContent = 'MONITOR';
-    } else if (rMargin >= 12 && rProfit >= 10) {
-      verdict.classList.add('verdict-monitor');
-      verdict.textContent = 'MONITOR';
-    } else if (rProfit <= 0) {
-      verdict.classList.add('verdict-kill');
-      verdict.textContent = 'KILL';
+
+    if (strategy === 'visibility') {
+      if (rProfit >= 0) {
+        verdict.classList.add('verdict-launch');
+        verdict.textContent = 'LAUNCH';
+      } else if (rProfit >= -5) {
+        verdict.classList.add('verdict-monitor');
+        verdict.textContent = 'MONITOR';
+      } else {
+        verdict.classList.add('verdict-kill');
+        verdict.textContent = 'KILL';
+      }
     } else {
-      verdict.classList.add('verdict-monitor');
-      verdict.textContent = 'MONITOR';
+      if (rProfit >= 10 && rMargin >= 12 && rAdsPct <= 15) {
+        verdict.classList.add('verdict-go');
+        verdict.textContent = 'GO';
+      } else if (rProfit <= 0) {
+        verdict.classList.add('verdict-kill');
+        verdict.textContent = 'KILL';
+      } else {
+        verdict.classList.add('verdict-monitor');
+        verdict.textContent = 'MONITOR';
+      }
     }
+
+    // ── Rules check ──
+    if (strategy === 'profit') {
+      const ruleMargin   = document.getElementById('rule-margin');
+      const ruleProfitEl = document.getElementById('rule-profit');
+      const ruleAds      = document.getElementById('rule-ads');
+      const ruleReturn   = document.getElementById('rule-return');
+
+      setRule(ruleMargin,   rMargin >= 12,  `Margin ≥ 12% — actual: ${fmt(rMargin)}%`);
+      setRule(ruleProfitEl, rProfit >= 10,  `Profit ≥ 10 AED — actual: AED ${fmt(rProfit)}`);
+      setRule(ruleAds,      rAdsPct <= 15,  `Ads ≤ 15% — actual: ${fmt(rAdsPct)}%`);
+      const returnCover = rProfit > 0 ? (rProfit * 3) >= roundedPrice * 0.15 : false;
+      setRule(ruleReturn, returnCover, `1 return ≤ 3 orders profit`);
+
+    } else {
+      // Visibility mode rules
+      const ruleBreakeven   = document.getElementById('rule-breakeven');
+      const ruleAdsVis      = document.getElementById('rule-ads-visibility');
+      const ruleLossCap     = document.getElementById('rule-loss-cap');
+
+      setRuleLaunch(ruleBreakeven, rProfit >= 0,
+        `Break-even or better — P&L: AED ${fmt(rProfit)}`);
+      setRuleLaunch(ruleAdsVis, rAdsPct <= 15,
+        `Ads ≤ 15% — actual: ${fmt(rAdsPct)}%`);
+      setRuleLaunch(ruleLossCap, rProfit >= -5,
+        `Max loss ≤ 5 AED per unit — actual: AED ${fmt(rProfit)}`);
+
+      // Visibility score bar
+      updateVisibilityScore(roundedPrice, cost, rProfit, rAdsPct);
+    }
+  }
+
+  /* ── Visibility score bar ── */
+  function updateVisibilityScore(price, cost, profit, adsPct) {
+    // Score: lower price vs cost = better visibility. Range 0–100.
+    const priceRatio = cost > 0 ? price / cost : 1;
+    // Closer to 1× cost = maximum competitiveness
+    // We map priceRatio 1.0→100%, 2.0→50%, 3.0→0%
+    const rawScore = Math.max(0, Math.min(100, (2 - priceRatio) * 100));
+    const scoreBar = document.getElementById('score-bar');
+    const scorePct = document.getElementById('score-pct');
+    const scoreTags = document.getElementById('score-tags');
+
+    scoreBar.style.width = rawScore + '%';
+    scorePct.textContent = Math.round(rawScore) + '%';
+
+    const tags = [];
+    if (profit >= 0)        tags.push('Break-even');
+    if (adsPct >= 8)        tags.push('Boosted Ads');
+    if (priceRatio <= 1.5)  tags.push('Aggressive Price');
+    if (priceRatio <= 1.25) tags.push('Launch Price');
+    if (profit < 0 && profit >= -5) tags.push('Subsidised');
+
+    scoreTags.innerHTML = tags.map(t => `<span class="score-tag">${t}</span>`).join('');
   }
 
   function setRule(el, pass, text) {
     el.className = 'rule-item ' + (pass ? 'pass' : 'fail');
     el.querySelector('.rule-dot').className = 'rule-dot ' + (pass ? 'pass' : 'fail');
+    el.querySelector('span').textContent = text;
+  }
+
+  function setRuleLaunch(el, pass, text) {
+    el.className = 'rule-item ' + (pass ? 'launch' : 'fail');
+    el.querySelector('.rule-dot').className = 'rule-dot ' + (pass ? 'launch' : 'fail');
     el.querySelector('span').textContent = text;
   }
 
