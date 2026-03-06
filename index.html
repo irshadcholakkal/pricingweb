@@ -3,497 +3,593 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pet Emirates — Pricing Calculator</title>
+<title>The Percentage Company — Pricing Calculator</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --bg:      #020c1b;
-  --s1:      rgba(255,255,255,0.03);
-  --s2:      rgba(255,255,255,0.06);
-  --b1:      rgba(255,255,255,0.07);
-  --b2:      rgba(255,255,255,0.13);
-  --cyan:    #00d9ff;
-  --purple:  #8b5cf6;
-  --text:    #e2e8f0;
-  --muted:   rgba(226,232,240,0.38);
-  --go:      #22c55e;
-  --warn:    #f59e0b;
-  --kill:    #ef4444;
-  --launch:  #3b82f6;
+  --bg:       #f7f6f4;
+  --surface:  #ffffff;
+  --surface2: #f2f1ef;
+  --border:   #e4e2de;
+  --border2:  #cccac5;
+  --accent:   #2d6a4f;
+  --accent-lt:#e8f4f0;
+  --text:     #1a1917;
+  --text2:    #6b6762;
+  --text3:    #a09d99;
+  --go:       #2d6a4f;
+  --go-bg:    #e8f4f0;
+  --warn:     #92570e;
+  --warn-bg:  #fdf3e3;
+  --kill:     #9b2c2c;
+  --kill-bg:  #fde8e8;
+  --info:     #1a4971;
+  --info-bg:  #e8f0fb;
+  --radius:   12px;
+  --radius-lg:16px;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
   min-height: 100vh;
-  padding: 28px 16px 56px;
+  padding: 40px 20px 80px;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Ambient glow */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background:
-    radial-gradient(ellipse 55% 40% at 10% 35%, rgba(0,217,255,0.055) 0%, transparent 70%),
-    radial-gradient(ellipse 45% 45% at 88% 12%, rgba(139,92,246,0.05) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.wrap { max-width: 500px; margin: 0 auto; position: relative; z-index: 1; }
+.wrap { max-width: 480px; margin: 0 auto; }
 
 /* ─── HEADER ─── */
 .hdr {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
 }
+
+.logo-mark {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 10px;
+}
+.logo-mark svg { width: 16px; height: 16px; }
 
 .hdr-brand h1 {
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.4px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
   color: var(--text);
 }
-
 .hdr-brand p {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-top: 2px;
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 1px;
+  font-weight: 400;
 }
 
 /* Strategy toggle */
 .seg {
   display: flex;
-  background: var(--s2);
-  border: 1px solid var(--b2);
-  border-radius: 100px;
-  padding: 3px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+.seg-btn {
+  padding: 5px 14px;
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: transparent;
+  color: var(--text2);
+  letter-spacing: 0;
+}
+.seg-btn.on-profit {
+  background: var(--surface);
+  color: var(--accent);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
+}
+.seg-btn.on-vis {
+  background: var(--surface);
+  color: var(--info);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
 }
 
-.seg-btn {
-  padding: 6px 15px;
-  border: none;
-  border-radius: 100px;
-  font-family: 'Space Grotesk', sans-serif;
+/* ─── SECTION LABEL ─── */
+.section-label {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.4px;
-  cursor: pointer;
-  transition: all 0.22s;
-  background: transparent;
-  color: var(--muted);
-}
-
-.seg-btn.on-profit {
-  background: var(--cyan);
-  color: #020c1b;
-  box-shadow: 0 0 18px rgba(0,217,255,0.45);
-}
-
-.seg-btn.on-vis {
-  background: var(--launch);
-  color: #fff;
-  box-shadow: 0 0 18px rgba(59,130,246,0.45);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 8px;
+  padding: 0 2px;
 }
 
 /* ─── CARD ─── */
 .card {
-  background: var(--s1);
-  border: 1px solid var(--b1);
-  border-radius: 18px;
-  padding: 18px 20px;
-  margin-bottom: 10px;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-}
-
-.card-ttl {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
-
-/* ─── PILL TOGGLES ─── */
-.plat-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.plat-group > span {
-  display: block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
   margin-bottom: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 
+/* ─── PLATFORM TOGGLE ─── */
+.plat-group > .plabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 8px;
+  display: block;
+}
 .ptoggle {
-  display: flex;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--b1);
-  border-radius: 100px;
-  padding: 3px;
+  display: inline-flex;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+  width: 100%;
 }
-
 .ptoggle-btn {
   flex: 1;
-  padding: 7px;
+  padding: 7px 12px;
   border: none;
-  border-radius: 100px;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.18s;
+  transition: all 0.15s;
   background: transparent;
-  color: var(--muted);
+  color: var(--text2);
   text-align: center;
 }
-
 .ptoggle-btn.on {
-  background: rgba(0,217,255,0.12);
-  color: var(--cyan);
-  box-shadow: inset 0 0 0 1px rgba(0,217,255,0.28);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
 }
 
 /* ─── FIELDS ─── */
-.field { margin-bottom: 18px; }
+.field { margin-bottom: 20px; }
 .field:last-child { margin-bottom: 0; }
 
 .field-hd {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 9px;
+  margin-bottom: 8px;
 }
-
-.field-hd .fn { font-size: 13px; color: var(--muted); font-weight: 500; }
+.field-hd .fn {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+}
 .field-hd .fv {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-lt);
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
+/* Number input */
 .inp-wrap { position: relative; }
 .inp-pre {
   position: absolute;
-  left: 14px; top: 50%;
+  left: 12px; top: 50%;
   transform: translateY(-50%);
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--text3);
   pointer-events: none;
+  user-select: none;
 }
-
 input[type="number"] {
   width: 100%;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--b1);
-  border-radius: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  padding: 11px 16px 11px 46px;
+  padding: 10px 14px 10px 42px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
   -moz-appearance: textfield;
 }
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
 input[type="number"]:focus {
-  border-color: rgba(0,217,255,0.4);
-  box-shadow: 0 0 0 3px rgba(0,217,255,0.08);
+  background: var(--surface);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(45,106,79,0.1);
 }
 
-/* Gradient-fill slider */
+/* Slider */
 input[type="range"] {
   width: 100%; height: 4px;
   -webkit-appearance: none; appearance: none;
   border-radius: 2px; outline: none; cursor: pointer;
   background: linear-gradient(to right,
-    var(--cyan) 0%, var(--cyan) var(--pct,33%),
-    rgba(255,255,255,0.1) var(--pct,33%), rgba(255,255,255,0.1) 100%);
+    var(--accent) 0%, var(--accent) var(--pct,0%),
+    var(--border) var(--pct,0%), var(--border) 100%);
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 16px; height: 16px;
   border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 10px rgba(0,217,255,0.65);
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
   cursor: pointer;
   transition: transform 0.1s, box-shadow 0.1s;
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.25);
-  box-shadow: 0 0 16px rgba(0,217,255,0.9);
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(45,106,79,0.25);
 }
 
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.hint { font-size: 10px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.hint { font-size: 11px; color: var(--text3); margin-top: 6px; line-height: 1.5; }
 
 /* ─── VISIBILITY BANNER ─── */
 .vis-banner {
-  background: rgba(59,130,246,0.07);
-  border: 1px solid rgba(59,130,246,0.2);
-  border-radius: 14px;
-  padding: 14px 18px;
-  margin-bottom: 10px;
+  background: var(--info-bg);
+  border: 1px solid rgba(26,73,113,0.2);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 8px;
   display: none;
 }
 .vis-banner.show { display: block; }
 .vis-banner-ttl {
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 1px; text-transform: uppercase;
-  color: var(--launch); margin-bottom: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--info);
+  margin-bottom: 4px;
 }
-.vis-banner p { font-size: 12px; color: rgba(96,165,250,0.85); line-height: 1.65; }
+.vis-banner p {
+  font-size: 12px;
+  color: var(--info);
+  opacity: 0.85;
+  line-height: 1.6;
+}
 
 /* ─── RESULT CARD ─── */
 .res-card {
-  background: var(--s1);
-  border: 1px solid var(--b1);
-  border-radius: 22px;
-  margin-bottom: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 8px;
   overflow: hidden;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Top glow bar */
-.res-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--top-glow, rgba(255,255,255,0.08));
-  transition: background 0.35s;
+.res-top-bar {
+  height: 3px;
+  background: var(--top-bar, var(--border));
+  transition: background 0.3s;
 }
 
 .res-head {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 18px 22px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px 0;
 }
-
 .res-head-lbl {
-  font-size: 10px; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--text3);
 }
 
+/* Badge */
 .badge {
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.8px; text-transform: uppercase;
-  padding: 4px 14px;
-  border-radius: 100px;
-  transition: all 0.3s;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 6px;
+  transition: all 0.25s;
 }
-.b-idle   { background: rgba(255,255,255,0.05); color: var(--muted);   border: 1px solid var(--b1); }
-.b-go     { background: rgba(34,197,94,0.12);   color: var(--go);      border: 1px solid rgba(34,197,94,0.3); }
-.b-warn   { background: rgba(245,158,11,0.12);  color: var(--warn);    border: 1px solid rgba(245,158,11,0.3); }
-.b-kill   { background: rgba(239,68,68,0.12);   color: var(--kill);    border: 1px solid rgba(239,68,68,0.3); }
-.b-launch { background: rgba(59,130,246,0.12);  color: var(--launch);  border: 1px solid rgba(59,130,246,0.3); }
+.b-idle   { background: var(--surface2); color: var(--text3); border: 1px solid var(--border); }
+.b-go     { background: var(--go-bg);   color: var(--go);    border: 1px solid rgba(45,106,79,0.25); }
+.b-warn   { background: var(--warn-bg); color: var(--warn);  border: 1px solid rgba(146,87,14,0.25); }
+.b-kill   { background: var(--kill-bg); color: var(--kill);  border: 1px solid rgba(155,44,44,0.25); }
+.b-launch { background: var(--info-bg); color: var(--info);  border: 1px solid rgba(26,73,113,0.25); }
 
 /* Price hero */
-.price-hero { text-align: center; padding: 18px 22px 14px; }
-
+.price-hero {
+  text-align: center;
+  padding: 20px 20px 16px;
+}
 .price-hero .cur {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 15px; font-weight: 500;
-  color: var(--muted);
-  vertical-align: top; line-height: 1.9;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text3);
+  vertical-align: top;
+  line-height: 2;
+  margin-right: 2px;
 }
-
 .price-num {
-  font-size: clamp(54px, 14vw, 74px);
+  font-size: clamp(52px, 13vw, 68px);
   font-weight: 700;
   letter-spacing: -3px;
-  color: var(--cyan);
-  text-shadow: 0 0 48px rgba(0,217,255,0.38);
-  transition: color 0.35s, text-shadow 0.35s;
+  color: var(--text);
   line-height: 1;
+  transition: color 0.3s;
 }
-.price-num.idle { color: rgba(226,232,240,0.18); text-shadow: none; }
+.price-num.idle { color: var(--border2); letter-spacing: -2px; }
+.price-sub {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 6px;
+  font-style: italic;
+}
 
 /* Metrics row */
 .metrics {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 1px; background: var(--b1);
-  border-top: 1px solid var(--b1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--border);
 }
 .metric {
-  background: rgba(2,12,27,0.8);
-  padding: 14px 22px;
+  padding: 14px 20px;
   text-align: center;
 }
+.metric:first-child { border-right: 1px solid var(--border); }
 .m-val {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 21px; font-weight: 600;
-  transition: color 0.3s;
+  font-size: 20px;
+  font-weight: 600;
+  transition: color 0.25s;
+  color: var(--text3);
 }
 .m-lbl {
-  font-size: 10px; font-weight: 600;
-  letter-spacing: 1px; text-transform: uppercase;
-  color: var(--muted); margin-top: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-top: 2px;
 }
 
-/* Visibility score bar */
+/* Visibility score */
 .vis-score {
-  padding: 14px 22px;
-  border-top: 1px solid var(--b1);
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
   display: none;
 }
 .vis-score.show { display: block; }
 .vs-hd {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 9px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 .vs-hd .vs-ttl {
-  font-size: 10px; font-weight: 600;
-  letter-spacing: 1.2px; text-transform: uppercase;
-  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text3);
 }
 .vs-hd .vs-pct {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13px; font-weight: 600;
-  color: var(--launch);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--info);
 }
 .score-track {
-  height: 6px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 3px; overflow: hidden;
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid var(--border);
 }
 .score-fill {
-  height: 100%; border-radius: 3px;
-  background: linear-gradient(90deg, var(--launch), var(--cyan));
-  transition: width 0.42s cubic-bezier(0.4,0,0.2,1);
+  height: 100%;
+  background: linear-gradient(90deg, var(--info), #4a9eca);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 .chips {
-  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
 }
 .chip {
-  font-size: 10px; font-weight: 600;
-  padding: 3px 10px; border-radius: 100px;
-  background: rgba(59,130,246,0.1);
-  color: var(--launch);
-  border: 1px solid rgba(59,130,246,0.2);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 2px 9px;
+  border-radius: 4px;
+  background: var(--info-bg);
+  color: var(--info);
+  border: 1px solid rgba(26,73,113,0.2);
 }
 
 /* Breakdown */
 .breakdown {
-  border-top: 1px solid var(--b1);
-  padding: 16px 22px;
+  border-top: 1px solid var(--border);
+  padding: 16px 20px;
+}
+.bd-ttl {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 12px;
 }
 .bd-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 .bd-item {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 7px 6px; border-radius: 8px; font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
 }
-.bd-item:hover { background: rgba(255,255,255,0.025); }
-.bd-l { font-size: 12px; color: var(--muted); }
+.bd-item:last-of-type { border-bottom: none; }
+.bd-l { font-size: 12px; color: var(--text2); }
 .bd-v {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; font-weight: 500; color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
 }
 .bd-v.neg { color: var(--kill); }
-.bd-v.cyn { color: var(--cyan); }
+.bd-v.cyn { color: var(--accent); }
+.bd-v.pos { color: var(--go); }
+.bd-v.blue { color: var(--info); }
 
 .bd-total {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 6px 0;
-  border-top: 1px solid var(--b1); margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0 0;
+  margin-top: 4px;
 }
-.bd-total .bd-l { font-size: 13px; font-weight: 600; color: var(--text); }
-.bd-total .bd-v { font-size: 16px; font-weight: 700; }
-.bd-v.pos   { color: var(--go); }
-.bd-v.blue  { color: var(--launch); }
+.bd-total .bd-l {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.bd-total .bd-v { font-size: 15px; font-weight: 700; }
 
 /* ─── RULES CARD ─── */
 .rules-card {
-  background: var(--s1);
-  border: 1px solid var(--b1);
-  border-radius: 18px;
-  padding: 18px 20px;
-  margin-bottom: 10px;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
-
-.rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
 .rc {
-  display: flex; align-items: center; gap: 10px;
-  padding: 11px 12px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid var(--b1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--surface2);
+  border: 1px solid var(--border);
   transition: all 0.2s;
 }
 .rc-icon {
-  width: 22px; height: 22px; border-radius: 50%;
+  width: 24px; height: 24px;
+  border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 700; flex-shrink: 0;
-  background: rgba(255,255,255,0.06);
-  color: var(--muted);
+  background: var(--border);
+  color: var(--text3);
 }
 .rc-text .rc-name {
-  font-size: 11px; font-weight: 600; display: block;
-  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  display: block;
+  color: var(--text2);
 }
 .rc-text .rc-detail {
-  font-size: 10px; color: var(--muted);
+  font-size: 10px;
+  color: var(--text3);
   font-family: 'JetBrains Mono', monospace;
+  margin-top: 1px;
+  display: block;
 }
 
-/* States */
-.rc.pass   { border-color: rgba(34,197,94,0.22);  background: rgba(34,197,94,0.05); }
-.rc.fail   { border-color: rgba(239,68,68,0.22);  background: rgba(239,68,68,0.05); }
-.rc.launch { border-color: rgba(59,130,246,0.22); background: rgba(59,130,246,0.05); }
+/* Rule states */
+.rc.pass   { background: var(--go-bg);   border-color: rgba(45,106,79,0.25); }
+.rc.fail   { background: var(--kill-bg); border-color: rgba(155,44,44,0.25); }
+.rc.launch { background: var(--info-bg); border-color: rgba(26,73,113,0.25); }
 
-.rc.pass   .rc-icon { background: rgba(34,197,94,0.15);  color: var(--go); }
-.rc.fail   .rc-icon { background: rgba(239,68,68,0.15);  color: var(--kill); }
-.rc.launch .rc-icon { background: rgba(59,130,246,0.15); color: var(--launch); }
+.rc.pass   .rc-icon { background: rgba(45,106,79,0.15);  color: var(--go);   border-radius: 6px; }
+.rc.fail   .rc-icon { background: rgba(155,44,44,0.15);  color: var(--kill); border-radius: 6px; }
+.rc.launch .rc-icon { background: rgba(26,73,113,0.15);  color: var(--info); border-radius: 6px; }
 
 .rc.pass   .rc-name { color: var(--go); }
 .rc.fail   .rc-name { color: var(--kill); }
-.rc.launch .rc-name { color: var(--launch); }
+.rc.launch .rc-name { color: var(--info); }
+.rc.pass   .rc-detail,
+.rc.fail   .rc-detail,
+.rc.launch .rc-detail { color: inherit; opacity: 0.7; }
 
 /* Alert */
 .alert {
-  background: rgba(239,68,68,0.07);
-  border: 1px solid rgba(239,68,68,0.2);
-  border-radius: 10px;
-  padding: 12px 14px; font-size: 12px;
-  color: rgba(252,165,165,0.85);
-  margin-top: 10px; line-height: 1.55;
+  background: var(--warn-bg);
+  border: 1px solid rgba(146,87,14,0.2);
+  border-radius: var(--radius);
+  padding: 11px 14px;
+  font-size: 12px;
+  color: var(--warn);
+  margin-top: 10px;
+  line-height: 1.55;
   display: none;
 }
 .alert.show { display: block; }
 
+/* ─── DIVIDER ─── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
+}
+
 /* ─── FOOTER ─── */
 .footer {
-  text-align: center; font-size: 11px;
-  color: var(--muted); padding-top: 8px;
-  letter-spacing: 0.5px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text3);
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
+.footer-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border2); }
 </style>
 </head>
 <body>
@@ -502,7 +598,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
   <!-- Header -->
   <div class="hdr">
     <div class="hdr-brand">
-      <h1>Pet Emirates</h1>
+      <div class="logo-mark">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="5" cy="5" r="2" fill="white" opacity="0.9"/>
+          <circle cx="11" cy="11" r="2" fill="white" opacity="0.9"/>
+          <line x1="3" y1="13" x2="13" y2="3" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <h1>The Percentage Company</h1>
       <p>Pricing Calculator</p>
     </div>
     <div class="seg">
@@ -517,33 +620,24 @@ input[type="range"]::-webkit-slider-thumb:hover {
     <p>Price at break-even to drive sales volume, collect reviews, and improve search ranking on Noon / Amazon. Profit target = 0%.</p>
   </div>
 
-  <!-- Platform & Fulfillment -->
-  <div class="card">
-    <div class="plat-row">
-      <div class="plat-group">
-        <span>Platform</span>
-        <div class="ptoggle" id="plat-tog">
-          <button class="ptoggle-btn on" onclick="setPlatform('noon')">Noon</button>
-          <button class="ptoggle-btn" onclick="setPlatform('amazon')">Amazon</button>
-        </div>
-      </div>
-      <div class="plat-group">
-        <span>Fulfillment</span>
-        <div class="ptoggle" id="ful-tog">
-          <button class="ptoggle-btn on" onclick="setFulfillment('fbp')">FBP</button>
-          <button class="ptoggle-btn" onclick="setFulfillment('fbn')">FBN</button>
-        </div>
+  <!-- Platform -->
+  <div class="section-label">Platform</div>
+  <div class="card" style="padding:14px 16px; margin-bottom:16px;">
+    <div class="plat-group">
+      <div class="ptoggle" id="plat-tog">
+        <button class="ptoggle-btn on" onclick="setPlatform('noon')">Noon</button>
+        <button class="ptoggle-btn" onclick="setPlatform('amazon')">Amazon</button>
       </div>
     </div>
   </div>
 
   <!-- Costs -->
-  <div class="card">
-    <div class="card-ttl">Product Costs</div>
+  <div class="section-label">Product Costs</div>
+  <div class="card" style="margin-bottom:16px;">
 
     <div class="field">
       <div class="field-hd">
-        <span class="fn">Base Cost (excl. VAT)</span>
+        <span class="fn">Base Cost <span style="color:var(--text3);font-weight:400;font-size:11px;">(excl. VAT)</span></span>
         <span class="fv" id="lbl-cost">—</span>
       </div>
       <div class="inp-wrap">
@@ -551,6 +645,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
         <input type="number" id="cost" placeholder="0.00" step="0.01" oninput="calc()">
       </div>
     </div>
+
+    <div class="divider"></div>
 
     <div class="field">
       <div class="field-hd">
@@ -572,8 +668,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
     <div class="field">
       <div class="field-hd">
-        <span class="fn">Delivery Charge</span>
-        <span class="fv" style="font-size:10px;color:var(--warn)">net after reimb.</span>
+        <span class="fn">Delivery Charge <span style="color:var(--text3);font-weight:400;font-size:11px;">net after reimb.</span></span>
       </div>
       <div class="inp-wrap">
         <span class="inp-pre">AED</span>
@@ -590,11 +685,12 @@ input[type="range"]::-webkit-slider-thumb:hover {
         oninput="slide(this,'lbl-reimb',' AED')">
       <div class="hint">10 AED if order &lt; 100 AED &nbsp;·&nbsp; 0 AED if order ≥ 100 AED</div>
     </div>
+
   </div>
 
   <!-- Ads & Target -->
-  <div class="card">
-    <div class="card-ttl">Ads &amp; Target</div>
+  <div class="section-label">Ads &amp; Target</div>
+  <div class="card" style="margin-bottom:16px;">
     <div class="two-col">
       <div class="field">
         <div class="field-hd">
@@ -616,23 +712,26 @@ input[type="range"]::-webkit-slider-thumb:hover {
   </div>
 
   <!-- Result Card -->
+  <div class="section-label">Recommended Sell Price</div>
   <div class="res-card" id="res-card">
+    <div class="res-top-bar" id="res-top-bar"></div>
     <div class="res-head">
-      <span class="res-head-lbl">Recommended Sell Price</span>
+      <span class="res-head-lbl">Result</span>
       <div class="badge b-idle" id="verdict">—</div>
     </div>
 
     <div class="price-hero">
       <span class="cur">AED </span><span class="price-num idle" id="out-price">—</span>
+      <div class="price-sub" id="price-sub">Enter product cost to calculate</div>
     </div>
 
     <div class="metrics">
       <div class="metric">
-        <div class="m-val" id="out-profit-aed" style="color:var(--muted)">—</div>
+        <div class="m-val" id="out-profit-aed">—</div>
         <div class="m-lbl" id="net-label">Net Profit</div>
       </div>
       <div class="metric">
-        <div class="m-val" id="out-margin" style="color:var(--muted)">—</div>
+        <div class="m-val" id="out-margin">—</div>
         <div class="m-lbl">Margin</div>
       </div>
     </div>
@@ -650,6 +749,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     </div>
 
     <div class="breakdown">
+      <div class="bd-ttl">Cost Breakdown</div>
       <div class="bd-grid">
         <div class="bd-item">
           <span class="bd-l">Sell Price</span>
@@ -668,7 +768,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
           <span class="bd-v neg" id="bd-referral">—</span>
         </div>
         <div class="bd-item">
-          <span class="bd-l">Delivery</span>
+          <span class="bd-l">Net Delivery</span>
           <span class="bd-v neg" id="bd-delivery">—</span>
         </div>
         <div class="bd-item">
@@ -684,11 +784,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
   </div>
 
   <!-- Rules -->
+  <div class="section-label" id="rules-section-label">Decision Rules</div>
   <div class="rules-card">
-    <div class="card-ttl" id="rules-ttl">Decision Rules</div>
     <div class="rules-grid">
 
-      <!-- Profit mode rules -->
+      <!-- Profit mode -->
       <div class="rc" id="rule-margin">
         <div class="rc-icon">%</div>
         <div class="rc-text">
@@ -718,7 +818,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
         </div>
       </div>
 
-      <!-- Visibility mode rules (hidden by default) -->
+      <!-- Visibility mode (hidden by default) -->
       <div class="rc" id="rule-breakeven" style="display:none">
         <div class="rc-icon">=</div>
         <div class="rc-text">
@@ -747,31 +847,32 @@ input[type="range"]::-webkit-slider-thumb:hover {
     </div>
   </div>
 
-  <div class="footer">Pet Emirates &nbsp;·&nbsp; Internal Tool &nbsp;·&nbsp; All fees excl. platform VAT</div>
+  <div class="footer">
+    <span>The Percentage Company</span>
+    <span class="footer-dot"></span>
+    <span>Internal Tool</span>
+    <span class="footer-dot"></span>
+    <span>Fees excl. platform VAT</span>
+  </div>
 
-</div><!-- /wrap -->
+</div>
 
 <script>
-let platform   = 'noon';
-let fulfillment = 'fbp';
-let strategy   = 'profit';
+let platform = 'noon';
+let strategy = 'profit';
 
-/* ── Slider: update fill % and label ── */
 function slide(el, lblId, suffix) {
   const min = +el.min, max = +el.max, val = +el.value;
-  const pct = ((val - min) / (max - min)) * 100;
-  el.style.setProperty('--pct', pct + '%');
+  el.style.setProperty('--pct', ((val - min) / (max - min)) * 100 + '%');
   document.getElementById(lblId).textContent = val + suffix;
   calc();
 }
 
 function initSlider(id) {
   const el = document.getElementById(id);
-  const min = +el.min, max = +el.max, val = +el.value;
-  el.style.setProperty('--pct', ((val - min) / (max - min)) * 100 + '%');
+  el.style.setProperty('--pct', ((+el.value - +el.min) / (+el.max - +el.min)) * 100 + '%');
 }
 
-/* ── Strategy ── */
 function setStrategy(s) {
   strategy = s;
   const bp = document.getElementById('btn-profit');
@@ -780,13 +881,12 @@ function setStrategy(s) {
   const visScore = document.getElementById('vis-score');
   const profitSlider = document.getElementById('profit');
 
-  const profitRules = ['rule-margin','rule-profit','rule-ads','rule-return'];
-  const visRules    = ['rule-breakeven','rule-ads-vis','rule-loss-cap'];
+  ['rule-margin','rule-profit','rule-ads','rule-return'].forEach(id =>
+    document.getElementById(id).style.display = s === 'profit' ? '' : 'none');
+  ['rule-breakeven','rule-ads-vis','rule-loss-cap'].forEach(id =>
+    document.getElementById(id).style.display = s === 'visibility' ? '' : 'none');
 
-  profitRules.forEach(id => document.getElementById(id).style.display = s === 'profit' ? '' : 'none');
-  visRules.forEach(id => document.getElementById(id).style.display = s === 'visibility' ? '' : 'none');
-
-  document.getElementById('rules-ttl').textContent =
+  document.getElementById('rules-section-label').textContent =
     s === 'visibility' ? 'Visibility Mode Rules' : 'Decision Rules';
 
   if (s === 'visibility') {
@@ -809,66 +909,45 @@ function setStrategy(s) {
   calc();
 }
 
-/* ── Platform ── */
 function setPlatform(p) {
   platform = p;
-  document.getElementById('plat-tog').querySelectorAll('.ptoggle-btn').forEach((b,i) => {
-    b.classList.toggle('on', (i===0 && p==='noon') || (i===1 && p==='amazon'));
+  document.getElementById('plat-tog').querySelectorAll('.ptoggle-btn').forEach((b, i) => {
+    b.classList.toggle('on', (i === 0 && p === 'noon') || (i === 1 && p === 'amazon'));
   });
   document.getElementById('reimb-field').style.display = p === 'noon' ? 'block' : 'none';
   calc();
 }
 
-/* ── Fulfillment ── */
-function setFulfillment(f) {
-  fulfillment = f;
-  document.getElementById('ful-tog').querySelectorAll('.ptoggle-btn').forEach((b,i) => {
-    b.classList.toggle('on', (i===0 && f==='fbp') || (i===1 && f==='fbn'));
-  });
-  const del = document.getElementById('delivery');
-  if (f === 'fbn') {
-    del.value = 5.58;
-    document.getElementById('reimb-field').style.display = 'none';
-  } else {
-    del.value = 14;
-    document.getElementById('reimb-field').style.display = platform === 'noon' ? 'block' : 'none';
-  }
-  calc();
-}
-
-/* ── Format ── */
 function f2(n) { return n.toFixed(2); }
 
-/* ── Main calc ── */
 function calc() {
-  const cost         = parseFloat(document.getElementById('cost').value) || 0;
-  const vatPct       = parseFloat(document.getElementById('vat').value) / 100;
-  const referralPct  = parseFloat(document.getElementById('referral').value) / 100;
-  const delivery     = parseFloat(document.getElementById('delivery').value) || 0;
-  const reimb        = (platform === 'noon' && fulfillment === 'fbp')
-                         ? parseFloat(document.getElementById('reimb').value) || 0 : 0;
-  const adsPct       = parseFloat(document.getElementById('ads').value) / 100;
-  const tgtProfitPct = parseFloat(document.getElementById('profit').value) / 100;
+  const cost        = parseFloat(document.getElementById('cost').value) || 0;
+  const vatPct      = parseFloat(document.getElementById('vat').value) / 100;
+  const referralPct = parseFloat(document.getElementById('referral').value) / 100;
+  const delivery    = parseFloat(document.getElementById('delivery').value) || 0;
+  const reimb       = platform === 'noon' ? parseFloat(document.getElementById('reimb').value) || 0 : 0;
+  const adsPct      = parseFloat(document.getElementById('ads').value) / 100;
+  const tgtProfit   = parseFloat(document.getElementById('profit').value) / 100;
 
   document.getElementById('lbl-cost').textContent = cost > 0 ? f2(cost) + ' AED' : '—';
 
-  const alert = document.getElementById('alert-box');
+  const alertEl = document.getElementById('alert-box');
 
   if (cost <= 0) {
-    alert.textContent = 'Enter your product cost above to see pricing recommendations.';
-    alert.classList.add('show');
+    alertEl.textContent = 'Enter your product cost above to see pricing recommendations.';
+    alertEl.classList.add('show');
     resetUI();
     return;
   }
 
-  const denom = 1 - referralPct - adsPct - tgtProfitPct;
+  const denom = 1 - referralPct - adsPct - tgtProfit;
   if (denom <= 0) {
-    alert.textContent = 'Referral + Ads + Profit % exceeds 100%. Adjust sliders.';
-    alert.classList.add('show');
+    alertEl.textContent = 'Referral + Ads + Profit exceeds 100%. Adjust sliders.';
+    alertEl.classList.add('show');
     resetUI();
     return;
   }
-  alert.classList.remove('show');
+  alertEl.classList.remove('show');
 
   const vatAmt      = cost * vatPct;
   const netDelivery = delivery - reimb;
@@ -881,43 +960,44 @@ function calc() {
   const rMargin = (rProfit / rounded) * 100;
   const rAdsPct = (rAds / rounded) * 100;
 
-  /* ── Price display ── */
+  // Price display
   const priceEl = document.getElementById('out-price');
   priceEl.textContent = f2(rounded);
   priceEl.classList.remove('idle');
+  document.getElementById('price-sub').textContent = '';
 
-  /* ── Verdict + glow ── */
+  // Verdict
   const verdict = document.getElementById('verdict');
-  const card    = document.getElementById('res-card');
+  const topBar  = document.getElementById('res-top-bar');
   verdict.className = 'badge';
 
-  let glowColor;
+  let barColor;
   if (strategy === 'visibility') {
     if (rProfit >= 0) {
-      verdict.classList.add('b-launch'); verdict.textContent = 'LAUNCH';
-      glowColor = 'rgba(59,130,246,0.7)';
+      verdict.classList.add('b-launch'); verdict.textContent = 'Launch';
+      barColor = '#4a9eca';
     } else if (rProfit >= -5) {
-      verdict.classList.add('b-warn');  verdict.textContent = 'MONITOR';
-      glowColor = 'rgba(245,158,11,0.7)';
+      verdict.classList.add('b-warn'); verdict.textContent = 'Monitor';
+      barColor = '#c8842a';
     } else {
-      verdict.classList.add('b-kill');  verdict.textContent = 'KILL';
-      glowColor = 'rgba(239,68,68,0.7)';
+      verdict.classList.add('b-kill'); verdict.textContent = 'Kill';
+      barColor = '#c05252';
     }
   } else {
     if (rProfit >= 10 && rMargin >= 12 && rAdsPct <= 15) {
-      verdict.classList.add('b-go');    verdict.textContent = 'GO';
-      glowColor = 'rgba(34,197,94,0.7)';
+      verdict.classList.add('b-go'); verdict.textContent = 'Go';
+      barColor = '#2d6a4f';
     } else if (rProfit <= 0) {
-      verdict.classList.add('b-kill');  verdict.textContent = 'KILL';
-      glowColor = 'rgba(239,68,68,0.7)';
+      verdict.classList.add('b-kill'); verdict.textContent = 'Kill';
+      barColor = '#c05252';
     } else {
-      verdict.classList.add('b-warn');  verdict.textContent = 'MONITOR';
-      glowColor = 'rgba(245,158,11,0.7)';
+      verdict.classList.add('b-warn'); verdict.textContent = 'Monitor';
+      barColor = '#c8842a';
     }
   }
-  card.style.setProperty('--top-glow', glowColor);
+  topBar.style.background = barColor;
 
-  /* ── Metric colors ── */
+  // Metrics
   const profitEl = document.getElementById('out-profit-aed');
   const marginEl = document.getElementById('out-margin');
   const netLbl   = document.getElementById('net-label');
@@ -929,19 +1009,18 @@ function calc() {
   netLbl.textContent   = strategy === 'visibility' ? 'Net P&L' : 'Net Profit';
   bdNetLbl.textContent = strategy === 'visibility' ? 'Net P&L' : 'Net Profit';
 
-  let metricColor;
+  let mc;
   if (strategy === 'visibility') {
-    metricColor = rProfit >= 0 ? 'var(--launch)' : (rProfit >= -5 ? 'var(--warn)' : 'var(--kill)');
+    mc = rProfit >= 0 ? 'var(--info)' : (rProfit >= -5 ? 'var(--warn)' : 'var(--kill)');
     bdNetEl.className = 'bd-v ' + (rProfit >= 0 ? 'blue' : 'neg');
   } else {
-    metricColor = (rProfit >= 10 && rMargin >= 12) ? 'var(--go)'
-                : rProfit > 0 ? 'var(--warn)' : 'var(--kill)';
+    mc = (rProfit >= 10 && rMargin >= 12) ? 'var(--go)' : rProfit > 0 ? 'var(--warn)' : 'var(--kill)';
     bdNetEl.className = 'bd-v ' + (rProfit >= 0 ? 'pos' : 'neg');
   }
-  profitEl.style.color = metricColor;
-  marginEl.style.color = metricColor;
+  profitEl.style.color = mc;
+  marginEl.style.color = mc;
 
-  /* ── Breakdown ── */
+  // Breakdown
   document.getElementById('bd-price').textContent    = f2(rounded);
   document.getElementById('bd-cost').textContent     = '−' + f2(cost);
   document.getElementById('bd-vat').textContent      = '−' + f2(vatAmt);
@@ -950,17 +1029,17 @@ function calc() {
   document.getElementById('bd-ads').textContent      = '−' + f2(rAds);
   document.getElementById('bd-net').textContent      = (rProfit >= 0 ? '+' : '') + f2(rProfit);
 
-  /* ── Rules ── */
+  // Rules
   if (strategy === 'profit') {
-    setRC('rule-margin',  rMargin >= 12,  `${f2(rMargin)}%`,    'd-margin');
-    setRC('rule-profit',  rProfit >= 10,  `${f2(rProfit)} AED`, 'd-profit');
-    setRC('rule-ads',     rAdsPct <= 15,  `${f2(rAdsPct)}%`,    'd-ads');
+    setRC('rule-margin', rMargin >= 12, f2(rMargin) + '%', 'd-margin');
+    setRC('rule-profit', rProfit >= 10, f2(rProfit) + ' AED', 'd-profit');
+    setRC('rule-ads',    rAdsPct <= 15, f2(rAdsPct) + '%', 'd-ads');
     const cover = rProfit > 0 && (rProfit * 3) >= rounded * 0.15;
-    setRC('rule-return',  cover,          cover ? 'covered' : 'not covered', 'd-return');
+    setRC('rule-return', cover, cover ? 'Covered' : 'Not covered', 'd-return');
   } else {
-    setRCLaunch('rule-breakeven', rProfit >= 0,   (rProfit >= 0 ? '+' : '') + f2(rProfit) + ' AED', 'd-breakeven');
-    setRCLaunch('rule-ads-vis',   rAdsPct <= 15,  f2(rAdsPct) + '%',                                'd-ads-vis');
-    setRCLaunch('rule-loss-cap',  rProfit >= -5,  (rProfit >= 0 ? '+' : '') + f2(rProfit) + ' AED', 'd-loss-cap');
+    setRCLaunch('rule-breakeven', rProfit >= 0,  (rProfit >= 0 ? '+' : '') + f2(rProfit) + ' AED', 'd-breakeven');
+    setRCLaunch('rule-ads-vis',   rAdsPct <= 15, f2(rAdsPct) + '%', 'd-ads-vis');
+    setRCLaunch('rule-loss-cap',  rProfit >= -5, (rProfit >= 0 ? '+' : '') + f2(rProfit) + ' AED', 'd-loss-cap');
     updateVisScore(rounded, cost, rProfit, rAdsPct);
   }
 }
@@ -968,27 +1047,24 @@ function calc() {
 function resetUI() {
   document.getElementById('out-price').textContent = '—';
   document.getElementById('out-price').classList.add('idle');
-  document.getElementById('out-profit-aed').textContent = '—';
-  document.getElementById('out-profit-aed').style.color = 'var(--muted)';
-  document.getElementById('out-margin').textContent = '—';
-  document.getElementById('out-margin').style.color = 'var(--muted)';
-  ['bd-price','bd-cost','bd-vat','bd-referral','bd-delivery','bd-ads','bd-net'].forEach(id => {
+  document.getElementById('price-sub').textContent = 'Enter product cost to calculate';
+  ['out-profit-aed','out-margin'].forEach(id => {
     document.getElementById(id).textContent = '—';
+    document.getElementById(id).style.color = 'var(--text3)';
   });
-  const verdict = document.getElementById('verdict');
-  verdict.className = 'badge b-idle'; verdict.textContent = '—';
-  document.getElementById('res-card').style.setProperty('--top-glow','rgba(255,255,255,0.08)');
+  ['bd-price','bd-cost','bd-vat','bd-referral','bd-delivery','bd-ads','bd-net'].forEach(id =>
+    document.getElementById(id).textContent = '—');
+  document.getElementById('verdict').className = 'badge b-idle';
+  document.getElementById('verdict').textContent = '—';
+  document.getElementById('res-top-bar').style.background = 'var(--border)';
 }
 
 function setRC(id, pass, detail, detailId) {
-  const el = document.getElementById(id);
-  el.className = 'rc ' + (pass ? 'pass' : 'fail');
+  document.getElementById(id).className = 'rc ' + (pass ? 'pass' : 'fail');
   document.getElementById(detailId).textContent = detail;
 }
-
 function setRCLaunch(id, pass, detail, detailId) {
-  const el = document.getElementById(id);
-  el.className = 'rc ' + (pass ? 'launch' : 'fail');
+  document.getElementById(id).className = 'rc ' + (pass ? 'launch' : 'fail');
   document.getElementById(detailId).textContent = detail;
 }
 
@@ -998,16 +1074,15 @@ function updateVisScore(price, cost, profit, adsPct) {
   document.getElementById('score-fill').style.width = score + '%';
   document.getElementById('score-pct').textContent = Math.round(score) + '%';
   const tags = [];
-  if (profit >= 0)        tags.push('Break-even');
-  if (adsPct >= 8)        tags.push('Boosted Ads');
-  if (ratio <= 1.5)       tags.push('Aggressive');
-  if (ratio <= 1.25)      tags.push('Launch Price');
+  if (profit >= 0)             tags.push('Break-even');
+  if (adsPct >= 8)             tags.push('Boosted Ads');
+  if (ratio <= 1.5)            tags.push('Aggressive');
+  if (ratio <= 1.25)           tags.push('Launch Price');
   if (profit < 0 && profit >= -5) tags.push('Subsidised');
   document.getElementById('chips').innerHTML =
     tags.map(t => `<span class="chip">${t}</span>`).join('');
 }
 
-/* ── Init ── */
 ['vat','referral','reimb','ads','profit'].forEach(initSlider);
 calc();
 </script>
